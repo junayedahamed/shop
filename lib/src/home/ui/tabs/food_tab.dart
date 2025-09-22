@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
@@ -43,6 +45,7 @@ class _FoodTabState extends State<FoodTab> {
                   childAspectRatio: 0.7,
                 ),
                 itemBuilder: (context, index) {
+                  // log(data[index]);
                   return ProductCard();
                 },
               );
