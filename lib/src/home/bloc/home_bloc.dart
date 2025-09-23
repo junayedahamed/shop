@@ -12,6 +12,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<FoodInitialEvent>(foodInitialEvent);
+    on<OnrefreshEvent>(onrefreshEvent);
     on<AddToFavouriteEvent>(addToFavouriteEvent);
     on<AddToCartEvent>(addToCartEvent);
   }
@@ -51,5 +52,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> addToCartEvent(AddToCartEvent event, Emitter<HomeState> emit) {
     emit(AddedToCartState());
     cart.add(event.data);
+  }
+
+  FutureOr<void> onrefreshEvent(
+    OnrefreshEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    try {
+      emit(FoodLoadingState());
+      final uri = Uri.parse('https://test-v37i.onrender.com/get');
+      final http.Response response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final values = jsonDecode(response.body);
+        foodData.addAll(values);
+        emit(FoodLoadedState(data: foodData));
+      }
+    } catch (e) {
+      emit(FoodLoadFailedState());
+    }
   }
 }

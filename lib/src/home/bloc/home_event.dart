@@ -5,6 +5,8 @@ sealed class HomeEvent {}
 
 final class FoodInitialEvent extends HomeEvent {}
 
+final class OnrefreshEvent extends HomeEvent {}
+
 final class AddToFavouriteEvent extends HomeEvent {
   final dynamic data;
   AddToFavouriteEvent({required this.data});
