@@ -7,7 +7,11 @@ final class HomeInitial extends HomeState {}
 
 final class FoodLoadingState extends HomeState {}
 
-final class FoodLoadFailedState extends HomeState {}
+final class FoodLoadFailedState extends HomeState {
+  final String errorMessage;
+
+  FoodLoadFailedState({required this.errorMessage});
+}
 
 final class FoodLoadedState extends HomeState {
   final List data;

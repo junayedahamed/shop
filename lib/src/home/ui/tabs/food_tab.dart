@@ -96,10 +96,12 @@ class _FoodTabState extends State<FoodTab> {
                 return Center(child: CircularProgressIndicator());
 
               case FoodLoadFailedState():
-                return Center(child: Text("Failed to load data"));
+                final errorMsg = state.errorMessage;
+                return Center(child: Text(errorMsg.toString()));
               case FoodLoadedState():
                 final data = state.data;
                 return GridView.builder(
+                  shrinkWrap: true,
                   itemCount: data.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossCount,
@@ -109,7 +111,7 @@ class _FoodTabState extends State<FoodTab> {
                     mainAxisSpacing: 10,
                   ),
                   itemBuilder: (context, index) {
-                    // log(data[index].toString());
+                    log(data[index].toString());
                     return ProductCard(
                       iconSize: iconSize,
                       name: data[index]['name'],
@@ -123,7 +125,7 @@ class _FoodTabState extends State<FoodTab> {
                   },
                 );
               default:
-                return Center(child: Text(state.toString()));
+                return SizedBox.shrink();
             }
           },
         ),
