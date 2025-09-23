@@ -14,12 +14,29 @@ class FavoritePage extends StatelessWidget {
         bloc: favoriteBloc,
         listener: (context, state) {},
         builder: (context, state) {
-          return ListView.builder(
-            itemCount: fav.length,
-            itemBuilder: (context, index) {
-              return FavouriteDataCard();
-            },
-          );
+          if (fav.isNotEmpty) {
+            return ListView.separated(
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 10);
+              },
+
+              itemCount: fav.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: FavouriteDataCard(
+                    unfavoritePress: () {},
+                    deletePress: () {},
+                    onFavProductPress: () {},
+                    price: fav[index]['email'],
+                    productName: fav[index]['name'],
+                  ),
+                );
+              },
+            );
+          } else {
+            return Center(child: Text("Nothing in favorite"));
+          }
         },
       ),
     );
