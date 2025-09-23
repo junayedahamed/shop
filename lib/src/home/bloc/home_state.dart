@@ -17,6 +17,6 @@ final class FoodLoadedState extends HomeState {
 
 final class HomeActionState extends HomeState {}
 
-final class AddToFavouriteState extends HomeActionState {}
+final class AddedToFavouriteState extends HomeActionState {}
 
-final class AddToCartState extends HomeActionState {}
+final class AddedToCartState extends HomeActionState {}
