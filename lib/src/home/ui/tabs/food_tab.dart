@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
+import 'package:ocad/util/responsive_util.dart';
 
 class FoodTab extends StatefulWidget {
   const FoodTab({super.key});
@@ -20,6 +23,38 @@ class _FoodTabState extends State<FoodTab> {
 
   @override
   Widget build(BuildContext context) {
+    // final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
+    log(w.toString());
+    int crossCount = 2;
+    double aspectRatio = 0.66;
+    double iconSize = 25;
+
+    // Use the ResponsiveUtils class to determine the device's screen size.
+    if (ResponsiveUtils.isMobile(context)) {
+      crossCount = 2;
+      iconSize = 25;
+      if (w >= 270 && w <= 420) {
+        aspectRatio = 0.60;
+      } else {
+        aspectRatio = 0.70;
+      }
+    } else if (ResponsiveUtils.isTablet(context)) {
+      crossCount = 3;
+      if (w <= 1000 && w >= 800) {
+        aspectRatio = 0.9;
+      } else {
+        aspectRatio = 0.72;
+      }
+
+      iconSize = 30;
+    } else if (ResponsiveUtils.isDesktop(context)) {
+      crossCount = 4;
+      aspectRatio = 1.15;
+      iconSize = 35;
+    }
+
+    log(aspectRatio.toString());
     return Scaffold(
       body: BlocConsumer<HomeBloc, HomeState>(
         bloc: homeBloc,
@@ -63,13 +98,16 @@ class _FoodTabState extends State<FoodTab> {
               return GridView.builder(
                 itemCount: data.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  childAspectRatio: 0.66,
+                  crossAxisCount: crossCount,
+                  crossAxisSpacing: 15,
+
+                  childAspectRatio: aspectRatio,
+                  mainAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) {
                   // log(data[index].toString());
                   return ProductCard(
+                    iconSize: iconSize,
                     name: data[index]['name'],
                     cartPress: () {
                       homeBloc.add(AddToCartEvent(data: data[index]));

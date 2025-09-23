@@ -6,20 +6,19 @@ class ProductCard extends StatelessWidget {
     required this.name,
     required this.cartPress,
     required this.favoritePress,
+    required this.iconSize,
   });
   final String name;
+  final double iconSize;
   final VoidCallback cartPress, favoritePress;
   @override
   Widget build(BuildContext context) {
-    final h = MediaQuery.of(context).size.height;
-    final w = MediaQuery.of(context).size.width;
     return Container(
-      height: h * .30,
-      width: w * .45,
+      height: 400,
+      width: 300,
       constraints: BoxConstraints(maxHeight: 450, maxWidth: 300),
       decoration: BoxDecoration(),
       child: Card(
-        // color: Colors.red,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Stack(
@@ -27,27 +26,30 @@ class ProductCard extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: favoritePress,
-                icon: Icon(Icons.favorite_outline),
+                icon: Icon(Icons.favorite_outline, size: iconSize),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 5,
-                children: [
-                  SizedBox(height: 2),
-                  SizedBox(height: 100, child: Placeholder()),
-                  Text(name),
-                  Text("Product Desc..................................."),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Price:1111"),
-                      IconButton(
-                        onPressed: cartPress,
-                        icon: Icon(Icons.shopify),
-                      ),
-                    ],
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 5,
+                  children: [
+                    SizedBox(height: 100, child: Placeholder()),
+                    SizedBox(height: 2),
+                    Text(name),
+                    Text("Product Desc..................................."),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Price:1111"),
+                        IconButton(
+                          onPressed: cartPress,
+                          icon: Icon(Icons.shopify, size: iconSize),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

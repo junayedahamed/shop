@@ -12,8 +12,17 @@ class FavoritePage extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<FavoriteBloc, FavoriteState>(
         bloc: favoriteBloc,
-        listener: (context, state) {},
+        buildWhen: (previous, current) => current is! FavoriteActionState,
+        listenWhen: (previous, current) => current is FavoriteActionState,
+        listener: (context, state) {
+          if (state is FavoriteRemovedMessageState) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("Removed from Favorite")));
+          }
+        },
         builder: (context, state) {
+          // print(state);s
           if (fav.isNotEmpty) {
             return ListView.separated(
               separatorBuilder: (context, index) {
@@ -25,8 +34,10 @@ class FavoritePage extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: FavouriteDataCard(
-                    unfavoritePress: () {},
-                    deletePress: () {},
+                    unfavoritePress: () {
+                      favoriteBloc.add(RemoveFromFavEvent(index: index));
+                    },
+
                     onFavProductPress: () {},
                     price: fav[index]['email'],
                     productName: fav[index]['name'],

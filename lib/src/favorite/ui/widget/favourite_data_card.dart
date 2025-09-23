@@ -4,12 +4,12 @@ class FavouriteDataCard extends StatelessWidget {
   const FavouriteDataCard({
     super.key,
     required this.onFavProductPress,
-    required this.deletePress,
+
     required this.productName,
     required this.price,
     required this.unfavoritePress,
   });
-  final VoidCallback onFavProductPress, deletePress, unfavoritePress;
+  final VoidCallback onFavProductPress, unfavoritePress;
   final String productName, price;
 
   @override
@@ -29,18 +29,9 @@ class FavouriteDataCard extends StatelessWidget {
           leading: CircleAvatar(child: Placeholder()),
           title: Text(productName),
           subtitle: Text(price, style: TextStyle(fontSize: 12)),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(onPressed: deletePress, icon: Icon(Icons.delete)),
-
-              IconButton(
-                onPressed: unfavoritePress,
-                icon: Icon(Icons.favorite),
-              ),
-            ],
+          trailing: IconButton(
+            onPressed: unfavoritePress,
+            icon: Icon(Icons.favorite),
           ),
         ),
       ),
