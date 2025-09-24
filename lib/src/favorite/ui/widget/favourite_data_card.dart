@@ -8,8 +8,9 @@ class FavouriteDataCard extends StatelessWidget {
     required this.productName,
     required this.price,
     required this.unfavoritePress,
+    required this.addToCart,
   });
-  final VoidCallback onFavProductPress, unfavoritePress;
+  final VoidCallback onFavProductPress, unfavoritePress, addToCart;
   final String productName, price;
 
   @override
@@ -29,9 +30,21 @@ class FavouriteDataCard extends StatelessWidget {
           leading: CircleAvatar(child: Placeholder()),
           title: Text(productName),
           subtitle: Text(price, style: TextStyle(fontSize: 12)),
-          trailing: IconButton(
-            onPressed: unfavoritePress,
-            icon: Icon(Icons.favorite),
+          trailing: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: unfavoritePress,
+                icon: Icon(Icons.favorite),
+                tooltip: "Remove from Favorite",
+              ),
+              IconButton(
+                onPressed: addToCart,
+                icon: Icon(Icons.shopify),
+                tooltip: "Add to cart",
+              ),
+            ],
           ),
         ),
       ),

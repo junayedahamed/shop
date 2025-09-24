@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/database/demo_data.dart';
 import 'package:ocad/src/favorite/bloc/favorite_bloc.dart';
 import 'package:ocad/src/favorite/ui/widget/favourite_data_card.dart';
+import 'package:ocad/src/home/bloc/home_bloc.dart';
 
 class FavoritePage extends StatelessWidget {
   FavoritePage({super.key});
   final FavoriteBloc favoriteBloc = FavoriteBloc();
+  final HomeBloc homeBloc = HomeBloc();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +36,9 @@ class FavoritePage extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: FavouriteDataCard(
+                    addToCart: () {
+                      homeBloc.add(AddToCartEvent(data: fav[index]));
+                    },
                     unfavoritePress: () {
                       favoriteBloc.add(RemoveFromFavEvent(index: index));
                     },

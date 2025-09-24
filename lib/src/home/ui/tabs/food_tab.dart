@@ -75,7 +75,7 @@ class _FoodTabState extends State<FoodTab> {
 
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(SnackBar(content: Text("Adde in cart")));
+              ).showSnackBar(SnackBar(content: Text("Added in cart")));
             }
             if (state is AddedToFavouriteState) {
               //toast for android ios and web only
@@ -84,7 +84,7 @@ class _FoodTabState extends State<FoodTab> {
               //snackbar
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(SnackBar(content: Text("Adde in favorite")));
+              ).showSnackBar(SnackBar(content: Text("Added in favorite")));
             }
           },
           buildWhen: (previous, current) => current is! HomeActionState,
