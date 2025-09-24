@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
-import 'package:ocad/util/responsive_util.dart';
+import 'package:ocad/src/util/responsive_util.dart';
 
 class FoodTab extends StatefulWidget {
   const FoodTab({super.key});
