@@ -18,7 +18,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) {
     log(event.index.toString());
-    fav.removeAt(event.index);
+    RuntimeData.fav.removeAt(event.index);
     emit(RemoveFromFavState());
     emit(FavoriteRemovedMessageState());
   }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
+import 'package:ocad/src/product_model/product_model.dart';
 import 'package:ocad/src/util/responsive_util.dart';
 
 class FoodTab extends StatefulWidget {
@@ -99,7 +100,9 @@ class _FoodTabState extends State<FoodTab> {
                 final errorMsg = state.errorMessage;
                 return Center(child: Text(errorMsg.toString()));
               case FoodLoadedState():
-                final data = state.data;
+                final data = state.data
+                    .where((element) => element.category == Category.food)
+                    .toList();
                 return GridView.builder(
                   shrinkWrap: true,
                   itemCount: data.length,
@@ -111,10 +114,15 @@ class _FoodTabState extends State<FoodTab> {
                     mainAxisSpacing: 10,
                   ),
                   itemBuilder: (context, index) {
-                    log(data[index].toString());
+                    // log(data[index].toString());
+                    // final price = double.parse(data[index]['price']);
+                    // log((data[index]['price'].runtimeType).toString());
+                    final datacell = data[index];
                     return ProductCard(
+                      description: datacell.description,
                       iconSize: iconSize,
-                      name: data[index]['name'],
+                      name: datacell.productname,
+                      price: datacell.price,
                       cartPress: () {
                         homeBloc.add(AddToCartEvent(data: data[index]));
                       },

@@ -25,27 +25,29 @@ class FavoritePage extends StatelessWidget {
         },
         builder: (context, state) {
           // print(state);s
-          if (fav.isNotEmpty) {
+          if (RuntimeData.fav.isNotEmpty) {
             return ListView.separated(
               separatorBuilder: (context, index) {
                 return SizedBox(height: 10);
               },
 
-              itemCount: fav.length,
+              itemCount: RuntimeData.fav.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: FavouriteDataCard(
                     addToCart: () {
-                      homeBloc.add(AddToCartEvent(data: fav[index]));
+                      homeBloc.add(
+                        AddToCartEvent(data: RuntimeData.fav[index]),
+                      );
                     },
                     unfavoritePress: () {
                       favoriteBloc.add(RemoveFromFavEvent(index: index));
                     },
 
                     onFavProductPress: () {},
-                    price: fav[index]['email'],
-                    productName: fav[index]['name'],
+                    price: RuntimeData.fav[index]['email'],
+                    productName: RuntimeData.fav[index]['name'],
                   ),
                 );
               },

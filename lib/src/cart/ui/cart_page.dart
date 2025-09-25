@@ -26,7 +26,7 @@ class CartPage extends StatelessWidget {
       builder: (context, state) {
         // log(state.toString());
 
-        if (cart.isEmpty) {
+        if (RuntimeData.cart.isEmpty) {
           return Center(child: Text("Cart is Empty"));
         }
 
@@ -36,15 +36,15 @@ class CartPage extends StatelessWidget {
             separatorBuilder: (context, index) {
               return SizedBox(height: 10);
             },
-            itemCount: cart.length,
+            itemCount: RuntimeData.cart.length,
 
             itemBuilder: (context, index) {
               return CartItemCard(
                 onCartProductPress: () {
                   //navigate another page
                 },
-                productName: cart[index]['name'],
-                price: cart[index]['email'],
+                productName: RuntimeData.cart[index]['name'],
+                price: RuntimeData.cart[index]['email'],
                 deletePress: () {
                   log(index.toString());
                   cartBloc.add(RemoveFromCartEvent(index: index));

@@ -7,15 +7,18 @@ class ProductCard extends StatelessWidget {
     required this.cartPress,
     required this.favoritePress,
     required this.iconSize,
+    required this.description,
+    required this.price,
   });
-  final String name;
+  final String name, description;
   final double iconSize;
+  final double price;
   final VoidCallback cartPress, favoritePress;
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 400,
-      width: 300,
+      width: 320,
       constraints: BoxConstraints(maxHeight: 450, maxWidth: 300),
       decoration: BoxDecoration(),
       child: Card(
@@ -36,12 +39,17 @@ class ProductCard extends StatelessWidget {
                   children: [
                     SizedBox(height: 100, child: Placeholder()),
                     SizedBox(height: 2),
-                    Text(name),
-                    Text("Product Desc..................................."),
+                    Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text(
+                      description,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                    Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Price:1111"),
+                        Text("Price:$price"),
                         IconButton(
                           onPressed: cartPress,
                           icon: Icon(Icons.shopify, size: iconSize),

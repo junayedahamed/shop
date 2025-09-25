@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final List tabs = ["Food", "Electronics", "Cloths", "Data"];
+  final List tabs = ["Food", "Electronics", "Cloths", "Vegetable"];
   late TabController controller;
   final TabHeaderProvider tabHeaderProvider = TabHeaderProvider();
   @override

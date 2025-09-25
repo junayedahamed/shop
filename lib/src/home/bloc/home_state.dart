@@ -14,7 +14,7 @@ final class FoodLoadFailedState extends HomeState {
 }
 
 final class FoodLoadedState extends HomeState {
-  final List data;
+  final List<ProductDataModel> data;
 
   FoodLoadedState({required this.data});
 }
