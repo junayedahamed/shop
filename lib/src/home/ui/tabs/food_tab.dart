@@ -103,6 +103,7 @@ class _FoodTabState extends State<FoodTab> {
                 final data = state.data
                     .where((element) => element.category == Category.food)
                     .toList();
+                // log(data.toString());
                 return GridView.builder(
                   shrinkWrap: true,
                   itemCount: data.length,

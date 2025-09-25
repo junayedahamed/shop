@@ -19,6 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<AddToCartEvent>(addToCartEvent);
   }
 
+  final RuntimeData runtimeData = RuntimeData();
   //food initial fetch event
   FutureOr<void> foodInitialEvent(
     FoodInitialEvent event,
@@ -26,17 +27,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     try {
       // final List<ProductDataModel> products = [];
-      log(RuntimeData.products.isEmpty.toString());
-      if (RuntimeData.products.isEmpty) {
+      log(runtimeData.products.isEmpty.toString());
+      if (runtimeData.products.isEmpty) {
         emit(FoodLoadingState());
         log("here");
         final d = await ApiCalls.getData();
         log(d.toString());
-        RuntimeData.products.addAll(d);
+        runtimeData.setAllDataToProduct = d;
 
-        emit(FoodLoadedState(data: RuntimeData.products));
+        emit(FoodLoadedState(data: runtimeData.products));
       } else {
-        emit(FoodLoadedState(data: RuntimeData.products));
+        emit(FoodLoadedState(data: runtimeData.products));
       }
     } catch (e) {
       log("message ${e.toString()}");
@@ -52,12 +53,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) {
     emit(AddedToFavouriteState());
-    RuntimeData.fav.add(event.data);
+    runtimeData.setManydataTofav = event.data;
   }
 
   FutureOr<void> addToCartEvent(AddToCartEvent event, Emitter<HomeState> emit) {
     emit(AddedToCartState());
-    RuntimeData.cart.add(event.data);
+    runtimeData.setdataToCart = event.data;
   }
 
   //on refresh
@@ -67,11 +68,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     try {
-      final List<ProductDataModel> products = [];
+      // final List<ProductDataModel> products = [];
       emit(FoodLoadingState());
-      products.addAll(await ApiCalls.getData());
-      log(products.toString());
-      emit(FoodLoadedState(data: products));
+      runtimeData.setAllDataToProduct = (await ApiCalls.getData());
+      // log(products.toString());
+      emit(FoodLoadedState(data: runtimeData.products));
     } catch (e) {
       if (e is Map) {
         emit(FoodLoadFailedState(errorMessage: e['message']));

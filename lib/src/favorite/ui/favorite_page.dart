@@ -9,6 +9,7 @@ class FavoritePage extends StatelessWidget {
   FavoritePage({super.key});
   final FavoriteBloc favoriteBloc = FavoriteBloc();
   final HomeBloc homeBloc = HomeBloc();
+  final RuntimeData runtimeData = RuntimeData();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,22 +26,21 @@ class FavoritePage extends StatelessWidget {
         },
         builder: (context, state) {
           // print(state);s
-          if (RuntimeData.fav.isNotEmpty) {
+          final data = runtimeData.favorite;
+          if (data.isEmpty) {
             return ListView.separated(
               separatorBuilder: (context, index) {
                 return SizedBox(height: 10);
               },
 
-              itemCount: RuntimeData.fav.length,
+              itemCount: data.length,
               itemBuilder: (context, index) {
-                final datacell = RuntimeData.fav[index];
+                final datacell = data[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: FavouriteDataCard(
                     addToCart: () {
-                      homeBloc.add(
-                        AddToCartEvent(data: RuntimeData.fav[index]),
-                      );
+                      homeBloc.add(AddToCartEvent(data: data[index]));
                     },
                     unfavoritePress: () {
                       favoriteBloc.add(RemoveFromFavEvent(index: index));

@@ -9,6 +9,7 @@ part 'favorite_event.dart';
 part 'favorite_state.dart';
 
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
+  final RuntimeData runtimeData = RuntimeData();
   FavoriteBloc() : super(FavoriteInitial()) {
     on<RemoveFromFavEvent>(removeFromFavEvent);
   }
@@ -18,7 +19,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) {
     log(event.index.toString());
-    RuntimeData.fav.removeAt(event.index);
+    runtimeData.favorite.removeAt(event.index);
     emit(RemoveFromFavState());
     emit(FavoriteRemovedMessageState());
   }

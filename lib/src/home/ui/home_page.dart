@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ocad/src/home/provider/tab_header_provider.dart';
 import 'package:ocad/src/home/ui/tabs/cloth_tab.dart';
-import 'package:ocad/src/home/ui/tabs/data_tab.dart';
+import 'package:ocad/src/home/ui/tabs/vegetable.dart';
 import 'package:ocad/src/home/ui/tabs/electronics_tab.dart';
 import 'package:ocad/src/home/ui/tabs/food_tab.dart';
 import 'package:ocad/src/home/ui/widget/tab_header_builder.dart';
