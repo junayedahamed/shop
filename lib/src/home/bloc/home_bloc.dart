@@ -52,12 +52,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) {
     emit(AddedToFavouriteState());
-    // fav.add(event.data);
+    RuntimeData.fav.add(event.data);
   }
 
   FutureOr<void> addToCartEvent(AddToCartEvent event, Emitter<HomeState> emit) {
     emit(AddedToCartState());
-    // cart.add(event.data);
+    RuntimeData.cart.add(event.data);
   }
 
   //on refresh

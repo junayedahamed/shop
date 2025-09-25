@@ -39,12 +39,13 @@ class CartPage extends StatelessWidget {
             itemCount: RuntimeData.cart.length,
 
             itemBuilder: (context, index) {
+              final datacell = RuntimeData.cart[index];
               return CartItemCard(
                 onCartProductPress: () {
                   //navigate another page
                 },
-                productName: RuntimeData.cart[index]['name'],
-                price: RuntimeData.cart[index]['email'],
+                productName: datacell.productname,
+                price: datacell.price.toString(),
                 deletePress: () {
                   log(index.toString());
                   cartBloc.add(RemoveFromCartEvent(index: index));

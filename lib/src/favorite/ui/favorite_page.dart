@@ -33,6 +33,7 @@ class FavoritePage extends StatelessWidget {
 
               itemCount: RuntimeData.fav.length,
               itemBuilder: (context, index) {
+                final datacell = RuntimeData.fav[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: FavouriteDataCard(
@@ -46,8 +47,8 @@ class FavoritePage extends StatelessWidget {
                     },
 
                     onFavProductPress: () {},
-                    price: RuntimeData.fav[index]['email'],
-                    productName: RuntimeData.fav[index]['name'],
+                    price: datacell.price.toString(),
+                    productName: datacell.productname,
                   ),
                 );
               },

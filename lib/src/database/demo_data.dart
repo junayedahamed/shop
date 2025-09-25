@@ -2,9 +2,9 @@ import 'package:ocad/src/product_model/product_model.dart';
 
 class RuntimeData {
   RuntimeData._();
-  static final fav = [];
+  static final List<ProductDataModel> fav = [];
 
-  static final cart = [];
+  static final List<ProductDataModel> cart = [];
 
   static final List<ProductDataModel> products = [];
 }
