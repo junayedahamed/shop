@@ -21,6 +21,10 @@ final class FoodLoadedState extends HomeState {
 
 final class HomeActionState extends HomeState {}
 
-final class AddedToFavouriteState extends HomeActionState {}
+final class AddedToFavouriteState extends HomeActionState {
+  final String message;
+
+  AddedToFavouriteState({required this.message});
+}
 
 final class AddedToCartState extends HomeActionState {}

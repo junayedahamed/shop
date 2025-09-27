@@ -8,3 +8,5 @@ final class RemoveFromFavEvent extends FavoriteEvent {
 
   RemoveFromFavEvent({required this.index});
 }
+
+final class FavoriteDataInitialEvent extends FavoriteEvent {}

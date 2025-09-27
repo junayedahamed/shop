@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
@@ -32,7 +31,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(FoodLoadingState());
         // log("here");
         final d = await ApiCalls.getData();
-        log(d.toString());
+        // log(d.toString());
         // runtimeData.setAllDataToProduct = d;
         products.addAll(d);
 
@@ -52,12 +51,42 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> addToFavouriteEvent(
     AddToFavouriteEvent event,
     Emitter<HomeState> emit,
-  ) {
-    emit(AddedToFavouriteState());
-    // runtimeData.setManydataTofav = event.data;
-    favorite.add(event.data);
-    log(event.data.productname);
-    log(favorite.toString());
+  ) async {
+    try {
+      final res = favorite.contains(event.data);
+      log(favorite[0].productname.toString());
+      log(favorite[0].description.toString());
+      log((favorite[0].id == event.data.id).toString());
+      log(favorite[0].category.toString());
+      log(favorite[0].createdat.toString());
+      log(favorite[0].prevprice.toString());
+      log(favorite[0].price.toString());
+
+      log(res.toString());
+
+      log(event.data.runtimeType.toString());
+      log(favorite.isEmpty.toString());
+      // print(event.data.id.toString());
+
+      if (!favorite.contains(event.data)) {
+        // final response = await ApiCalls.addItemToFavorite(
+        //   "useremailapp",
+        //   event.data.id,
+        // );
+        // log(favorite.isEmpty.toString());
+        emit(
+          AddedToFavouriteState(
+            message: favorite.contains(event.data).toString(),
+          ),
+        );
+        // favorite.add(event.data);
+      } else {
+        emit(AddedToFavouriteState(message: "Already added in favorite"));
+      }
+    } catch (e) {
+      // log(e.toString());
+      emit(AddedToFavouriteState(message: e.toString()));
+    }
   }
 
   FutureOr<void> addToCartEvent(AddToCartEvent event, Emitter<HomeState> emit) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
@@ -7,19 +5,24 @@ import 'package:ocad/src/home/ui/widget/product_card.dart';
 import 'package:ocad/src/product_model/product_model.dart';
 import 'package:ocad/src/util/responsive_util.dart';
 
-class FoodTab extends StatefulWidget {
-  const FoodTab({super.key});
+import '../../../favorite/bloc/favorite_bloc.dart';
 
+class UniversalTab extends StatefulWidget {
+  const UniversalTab({super.key, required this.category});
+
+  final Category category;
   @override
-  State<FoodTab> createState() => _FoodTabState();
+  State<UniversalTab> createState() => _UniversalTabState();
 }
 
-class _FoodTabState extends State<FoodTab> {
+class _UniversalTabState extends State<UniversalTab> {
   final HomeBloc homeBloc = HomeBloc();
+  final FavoriteBloc favoriteBloc = FavoriteBloc();
   final ScrollController scrollController = ScrollController();
   @override
   void initState() {
     homeBloc.add(FoodInitialEvent());
+    favoriteBloc.add(FavoriteDataInitialEvent());
     super.initState();
   }
 
@@ -27,7 +30,7 @@ class _FoodTabState extends State<FoodTab> {
   Widget build(BuildContext context) {
     // final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
-    // log(w.toString());
+    // log(w.toString());s
     int crossCount = 2;
     double aspectRatio = 0.66;
     double iconSize = 25;
@@ -82,11 +85,11 @@ class _FoodTabState extends State<FoodTab> {
             if (state is AddedToFavouriteState) {
               //toast for android ios and web only
               // Fluttertoast.showToast(msg: 'Added to Favorite');
-
+              // final message = state.message;
               //snackbar
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(SnackBar(content: Text("Added in favorite")));
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           buildWhen: (previous, current) => current is! HomeActionState,
@@ -102,7 +105,7 @@ class _FoodTabState extends State<FoodTab> {
                 return Center(child: Text(errorMsg.toString()));
               case FoodLoadedState():
                 final data = state.data
-                    .where((element) => element.category == Category.food)
+                    .where((element) => element.category == widget.category)
                     .toList();
                 // log(data.toString());
                 return GridView.builder(
@@ -121,17 +124,22 @@ class _FoodTabState extends State<FoodTab> {
                     // final price = double.parse(data[index]['price']);
                     // log((data[index]['price'].runtimeType).toString());
                     final datacell = data[index];
-                    return ProductCard(
-                      description: datacell.description,
-                      iconSize: iconSize,
-                      name: datacell.productname,
-                      price: datacell.price,
-                      cartPress: () {
-                        homeBloc.add(AddToCartEvent(data: data[index]));
+                    return GestureDetector(
+                      onTap: () {
+                        // log(datacell.id);
                       },
-                      favoritePress: () {
-                        homeBloc.add(AddToFavouriteEvent(data: data[index]));
-                      },
+                      child: ProductCard(
+                        description: datacell.description,
+                        iconSize: iconSize,
+                        name: datacell.productname,
+                        price: datacell.price,
+                        cartPress: () {
+                          homeBloc.add(AddToCartEvent(data: data[index]));
+                        },
+                        favoritePress: () {
+                          homeBloc.add(AddToFavouriteEvent(data: data[index]));
+                        },
+                      ),
                     );
                   },
                 );

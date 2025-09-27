@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:ocad/src/home/provider/tab_header_provider.dart';
-import 'package:ocad/src/home/ui/tabs/cloth_tab.dart';
-import 'package:ocad/src/home/ui/tabs/vegetable.dart';
-import 'package:ocad/src/home/ui/tabs/electronics_tab.dart';
-import 'package:ocad/src/home/ui/tabs/food_tab.dart';
+import 'package:ocad/src/home/ui/tabs/univarsal_tab.dart';
 import 'package:ocad/src/home/ui/widget/tab_header_builder.dart';
+import 'package:ocad/src/product_model/product_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,9 +17,11 @@ class _HomePageState extends State<HomePage>
   final List tabs = ["Food", "Electronics", "Cloths", "Vegetable"];
   late TabController controller;
   final TabHeaderProvider tabHeaderProvider = TabHeaderProvider();
+  //
   @override
   void initState() {
     controller = TabController(length: 4, vsync: this);
+    // favoriteBloc.add(FavoriteDataInitialEvent());
     super.initState();
   }
 
@@ -79,7 +80,13 @@ class _HomePageState extends State<HomePage>
           child: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             controller: controller,
-            children: [FoodTab(), ElectronicsTab(), ClothTab(), DataTab()],
+            // children: [FoodTab(), ElectronicsTab(), ClothTab(), DataTab()],
+            children: [
+              UniversalTab(category: Category.food),
+              UniversalTab(category: Category.electronics),
+              UniversalTab(category: Category.cloths),
+              UniversalTab(category: Category.vegetable),
+            ],
           ),
         ),
       ],
