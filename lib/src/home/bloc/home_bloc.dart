@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/database/demo_data.dart';
 
-import 'package:ocad/src/product_model/product_model.dart';
+import 'package:ocad/src/model/product_model/product_model.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -54,37 +54,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     try {
       final res = favorite.contains(event.data);
-      log(favorite[0].productname.toString());
-      log(favorite[0].description.toString());
-      log((favorite[0].id == event.data.id).toString());
-      log(favorite[0].category.toString());
-      log(favorite[0].createdat.toString());
-      log(favorite[0].prevprice.toString());
-      log(favorite[0].price.toString());
 
-      log(res.toString());
-
-      log(event.data.runtimeType.toString());
-      log(favorite.isEmpty.toString());
-      // print(event.data.id.toString());
-
-      if (!favorite.contains(event.data)) {
-        // final response = await ApiCalls.addItemToFavorite(
-        //   "useremailapp",
-        //   event.data.id,
-        // );
-        // log(favorite.isEmpty.toString());
-        emit(
-          AddedToFavouriteState(
-            message: favorite.contains(event.data).toString(),
-          ),
+      if (!res) {
+        final response = await ApiCalls.addItemToFavorite(
+          "useremailapp",
+          event.data.id,
         );
-        // favorite.add(event.data);
+        // log(favorite.isEmpty.toString());
+        emit(AddedToFavouriteState(message: response));
+        favorite.add(event.data);
       } else {
         emit(AddedToFavouriteState(message: "Already added in favorite"));
       }
     } catch (e) {
-      // log(e.toString());
       emit(AddedToFavouriteState(message: e.toString()));
     }
   }

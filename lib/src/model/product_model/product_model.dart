@@ -35,6 +35,20 @@ class ProductDataModel {
     category: category ?? this.category,
   );
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ProductDataModel &&
+        other.id == id &&
+        other.productname == productname &&
+        other.description == description &&
+        other.category == category &&
+        other.createdat == createdat &&
+        other.prevprice == prevprice &&
+        other.price == price;
+  }
+
   /// Convert from Map to ProductDataModel
   factory ProductDataModel.fromMap(Map<String, dynamic> map) {
     return ProductDataModel(
@@ -63,6 +77,17 @@ class ProductDataModel {
       'description': description,
       'category': category.name, // stores enum as string
     };
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        productname.hashCode ^
+        description.hashCode ^
+        category.hashCode ^
+        createdat.hashCode ^
+        prevprice.hashCode ^
+        price.hashCode;
   }
 }
 

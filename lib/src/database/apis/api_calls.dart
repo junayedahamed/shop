@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:ocad/src/product_model/product_model.dart';
+import 'package:ocad/src/model/product_model/product_model.dart';
 
 class ApiCalls {
   ApiCalls._();

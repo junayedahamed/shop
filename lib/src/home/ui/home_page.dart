@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ocad/src/home/provider/tab_header_provider.dart';
 import 'package:ocad/src/home/ui/tabs/univarsal_tab.dart';
 import 'package:ocad/src/home/ui/widget/tab_header_builder.dart';
-import 'package:ocad/src/product_model/product_model.dart';
+import 'package:ocad/src/model/product_model/product_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

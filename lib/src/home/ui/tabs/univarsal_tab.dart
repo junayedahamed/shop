@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
-import 'package:ocad/src/product_model/product_model.dart';
+import 'package:ocad/src/model/product_model/product_model.dart';
 import 'package:ocad/src/util/responsive_util.dart';
 
 import '../../../favorite/bloc/favorite_bloc.dart';
