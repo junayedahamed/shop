@@ -4,12 +4,13 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:ocad/src/database/demo_data.dart';
+import 'package:ocad/src/product_model/product_model.dart';
 
 part 'favorite_event.dart';
 part 'favorite_state.dart';
 
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
-  final RuntimeData runtimeData = RuntimeData();
+  // final RuntimeData runtimeData = RuntimeData();
   FavoriteBloc() : super(FavoriteInitial()) {
     on<RemoveFromFavEvent>(removeFromFavEvent);
   }
@@ -19,7 +20,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) {
     log(event.index.toString());
-    runtimeData.favorite.removeAt(event.index);
+    favorite.remove(event.index);
     emit(RemoveFromFavState());
     emit(FavoriteRemovedMessageState());
   }

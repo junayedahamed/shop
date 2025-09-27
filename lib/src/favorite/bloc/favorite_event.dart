@@ -4,7 +4,7 @@ part of 'favorite_bloc.dart';
 sealed class FavoriteEvent {}
 
 final class RemoveFromFavEvent extends FavoriteEvent {
-  final int index;
+  final ProductDataModel index;
 
   RemoveFromFavEvent({required this.index});
 }

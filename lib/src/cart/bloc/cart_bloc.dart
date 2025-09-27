@@ -8,7 +8,7 @@ part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  final RuntimeData runtimeData = RuntimeData();
+  // final RuntimeData runtimeData = RuntimeData();
   CartBloc() : super(CartInitial()) {
     on<RemoveFromCartEvent>(removeFromCartEvent);
   }
@@ -17,7 +17,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     RemoveFromCartEvent event,
     Emitter<CartState> emit,
   ) {
-    runtimeData.cart.removeAt(event.index);
+    cart.removeAt(event.index);
     emit(RemovedFromCartState());
     emit(RemovedFromCartMsgState());
   }

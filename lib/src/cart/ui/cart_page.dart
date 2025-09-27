@@ -9,7 +9,7 @@ import 'package:ocad/src/database/demo_data.dart';
 class CartPage extends StatelessWidget {
   CartPage({super.key});
   final CartBloc cartBloc = CartBloc();
-  final RuntimeData runtimeData = RuntimeData();
+  // final RuntimeData runtimeData = RuntimeData();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CartBloc, CartState>(
@@ -26,7 +26,7 @@ class CartPage extends StatelessWidget {
       listenWhen: (previous, current) => current is CartActionState,
       builder: (context, state) {
         // log(state.toString());
-        final data = runtimeData.cart;
+        final data = cart;
         if (data.isEmpty) {
           return Center(child: Text("Cart is Empty"));
         }
