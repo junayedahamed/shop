@@ -99,7 +99,7 @@ class ApiCalls {
       log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
-        final message = jsonDecode(response.body).toString();
+        final message = jsonDecode(response.body)['message'].toString();
         return message;
       } else {
         return "Some Problem occoured";

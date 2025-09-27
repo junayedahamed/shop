@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/database/demo_data.dart';
@@ -25,14 +26,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     try {
-      // final List<ProductDataModel> products = [];
-      // log(products.isEmpty.toString());
       if (products.isEmpty) {
         emit(FoodLoadingState());
-        // log("here");
+
         final d = await ApiCalls.getData();
-        // log(d.toString());
-        // runtimeData.setAllDataToProduct = d;
+
         products.addAll(d);
 
         emit(FoodLoadedState(data: products));
@@ -57,7 +55,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       if (!res) {
         final response = await ApiCalls.addItemToFavorite(
-          "useremailapp",
+          dotenv.env['USER_EMAIL'].toString(),
           event.data.id,
         );
         // log(favorite.isEmpty.toString());

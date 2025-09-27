@@ -33,7 +33,7 @@ class _FavoritePageState extends State<FavoritePage> {
           if (state is FavoriteRemovedMessageState) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text("Removed from Favorite")));
+            ).showSnackBar(SnackBar(content: Text(state.removedMessage)));
           }
         },
         builder: (context, state) {
@@ -43,7 +43,7 @@ class _FavoritePageState extends State<FavoritePage> {
               return Center(child: CircularProgressIndicator());
 
             case FavoriteInitialDataLoadedSate():
-              final data = favorite;
+              final data = favorite.reversed.toList();
               // log(data.toString());
               if (data.isNotEmpty) {
                 return ListView.separated(
@@ -62,7 +62,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           homeBloc.add(AddToCartEvent(data: datacell));
                         },
                         unfavoritePress: () {
-                          favoriteBloc.add(RemoveFromFavEvent(index: datacell));
+                          favoriteBloc.add(RemoveFromFavEvent(item: datacell));
                         },
 
                         onFavProductPress: () {},

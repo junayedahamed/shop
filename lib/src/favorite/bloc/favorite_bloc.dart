@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/database/demo_data.dart';
@@ -20,11 +21,21 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   FutureOr<void> removeFromFavEvent(
     RemoveFromFavEvent event,
     Emitter<FavoriteState> emit,
-  ) {
+  ) async {
     // log(event.index.toString());
-    favorite.remove(event.index);
-    emit(RemoveFromFavState());
-    emit(FavoriteRemovedMessageState());
+    try {
+      final result = await ApiCalls.rmoveItemFromFavorite(
+        dotenv.env['USER_EMAIL'].toString(),
+        event.item.id,
+      );
+      favorite.remove(event.item);
+
+      emit(FavoriteInitialDataLoadedSate(productData: favorite));
+
+      emit(FavoriteRemovedMessageState(removedMessage: result));
+    } catch (e) {
+      emit(FavoriteRemoveErrorState(message: e.toString()));
+    }
   }
 
   FutureOr<void> favoriteDataInitialEvent(
@@ -38,9 +49,9 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         final favDatas = await ApiCalls.getItemFromFavorite("useremailapp");
         favorite.addAll(favDatas);
         log(favorite.toString());
-        emit(FavoriteInitialDataLoadedSate());
+        emit(FavoriteInitialDataLoadedSate(productData: favorite));
       } else {
-        emit(FavoriteInitialDataLoadedSate());
+        emit(FavoriteInitialDataLoadedSate(productData: favorite));
       }
     } catch (e) {
       emit(FavoriteInitialDataLoadErrorSate(errormessage: e.toString()));
