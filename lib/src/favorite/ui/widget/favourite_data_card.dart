@@ -36,12 +36,17 @@ class FavouriteDataCard extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: unfavoritePress,
-                icon: Icon(Icons.favorite),
-                tooltip: "Remove from Favorite",
+                icon: Icon(
+                  Icons.favorite,
+                  color: HSLColor.fromColor(
+                    Colors.pink,
+                  ).withLightness(0.6).toColor(),
+                ),
+                tooltip: "Make it unfavorite",
               ),
               IconButton(
                 onPressed: addToCart,
-                icon: Icon(Icons.shopify),
+                icon: Icon(Icons.shopping_cart, color: Colors.white70),
                 tooltip: "Add to cart",
               ),
             ],
