@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
+
 import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,7 +17,7 @@ class ApiCalls {
       // log(products.isEmpty.toString());
       final uri = Uri.parse("${dotenv.env['GET_PRODUCTS']}");
       final http.Response response = await http.get(uri);
-      log(response.statusCode.toString());
+      // log(response.statusCode.toString());
       if (response.statusCode == 200) {
         final values = jsonDecode(response.body);
         for (int i = 0; i < values.length; i++) {
@@ -53,7 +53,7 @@ class ApiCalls {
         },
         body: jsonEncode({"userEmail": useremail, "productId": productId}),
       );
-      log(response.statusCode.toString());
+      // log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         final message = jsonDecode(response.body)['message'].toString();
@@ -96,7 +96,7 @@ class ApiCalls {
           "Accept": "application/json",
         },
       );
-      log(response.statusCode.toString());
+      // log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         final message = jsonDecode(response.body)['message'].toString();
@@ -135,7 +135,7 @@ class ApiCalls {
           "Accept": "application/json",
         },
       );
-      log(response.statusCode.toString());
+      // log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         final res = jsonDecode(response.body);
@@ -145,7 +145,7 @@ class ApiCalls {
           final data = ProductDataModel.fromMap(res[i]);
           datas.add(data);
         }
-        log(datas.toString());
+        // log(datas.toString());
         return datas;
       } else {
         return [];

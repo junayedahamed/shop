@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
@@ -38,7 +38,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(FoodLoadedState(data: products));
       }
     } catch (e) {
-      log("message ${e.toString()}");
+      // log("message ${e.toString()}");
       // log((e is Map).toString());
       if (e is Map) {
         emit(FoodLoadFailedState(errorMessage: e['message']));

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -43,12 +42,12 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) async {
     try {
-      log("here${favorite.isEmpty}");
+      // log("here${favorite.isEmpty}");
       if (favorite.isEmpty) {
         emit(FavoriteInitialDataLoadingSate());
         final favDatas = await ApiCalls.getItemFromFavorite("useremailapp");
         favorite.addAll(favDatas);
-        log(favorite.toString());
+        // log(favorite.toString());
         emit(FavoriteInitialDataLoadedSate(productData: favorite));
       } else {
         emit(FavoriteInitialDataLoadedSate(productData: favorite));
