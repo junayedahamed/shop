@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ocad/src/database/demo_data.dart';
 import 'package:ocad/src/favorite/bloc/favorite_bloc.dart';
 import 'package:ocad/src/favorite/ui/widget/favourite_data_card.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
@@ -48,7 +47,7 @@ class _FavoritePageState extends State<FavoritePage> {
               return Center(child: CircularProgressIndicator());
 
             case FavoriteInitialDataLoadedSate():
-              final data = favorite.reversed.toList();
+              final data = state.productData.reversed.toList();
               // log(data.toString());
               if (data.isNotEmpty) {
                 return ListView.separated(

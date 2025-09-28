@@ -8,3 +8,5 @@ final class RemoveFromCartEvent extends CartEvent {
 
   RemoveFromCartEvent({required this.index});
 }
+
+final class CartInitialEvent extends CartEvent {}

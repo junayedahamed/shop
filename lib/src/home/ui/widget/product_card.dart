@@ -32,7 +32,7 @@ class ProductCard extends StatelessWidget {
                 icon: Icon(Icons.favorite_outline, size: iconSize),
               ),
               Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 5,
@@ -45,6 +45,7 @@ class ProductCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
+                    // Spacer(flex: 2),
                     Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,6 +57,7 @@ class ProductCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                    // SizedBox(height: 10),
                   ],
                 ),
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ocad/src/cart/bloc/cart_bloc.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
 import 'package:ocad/src/model/product_model/product_model.dart';
@@ -19,11 +20,19 @@ class _UniversalTabState extends State<UniversalTab> {
   final HomeBloc homeBloc = HomeBloc();
   final FavoriteBloc favoriteBloc = FavoriteBloc();
   final ScrollController scrollController = ScrollController();
+  final CartBloc cartBloc = CartBloc();
   @override
   void initState() {
-    homeBloc.add(FoodInitialEvent());
-    favoriteBloc.add(FavoriteDataInitialEvent());
+    getAllNecessary();
     super.initState();
+  }
+
+  void getAllNecessary() async {
+    await Future.microtask(() {
+      homeBloc.add(FoodInitialEvent());
+      favoriteBloc.add(FavoriteDataInitialEvent());
+      cartBloc.add(CartInitialEvent());
+    });
   }
 
   @override
