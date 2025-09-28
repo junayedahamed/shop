@@ -35,6 +35,11 @@ class _FavoritePageState extends State<FavoritePage> {
               context,
             ).showSnackBar(SnackBar(content: Text(state.removedMessage)));
           }
+          if (state is FavoriteRemoveErrorState) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
         },
         builder: (context, state) {
           // print(state);
