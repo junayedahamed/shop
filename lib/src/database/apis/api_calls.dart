@@ -168,5 +168,29 @@ class ApiCalls {
 
   //add to cart
 
-  //post api exceptions
+  Future<String> addItemToCart(String useremail, String productId) async {
+    try {
+      final url = Uri.parse("${dotenv.env['ADDTOCART']}");
+      //   log(dotenv.env['ADDTOFAV'].toString());
+
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json", // 👈 important
+          "Accept": "application/json",
+        },
+        body: jsonEncode({"userEmail": useremail, "productId": productId}),
+      );
+      // log(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        final message = jsonDecode(response.body)['message'].toString();
+        return message;
+      } else {
+        return "Some Problem occoured";
+      }
+    } catch (e) {
+      throw exc.handlePostApiException(e);
+    }
+  }
 }

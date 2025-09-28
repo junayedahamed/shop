@@ -89,7 +89,7 @@ class _UniversalTabState extends State<UniversalTab> {
 
               ScaffoldMessenger.of(
                 context,
-              ).showSnackBar(SnackBar(content: Text("Added in cart")));
+              ).showSnackBar(SnackBar(content: Text(state.cartAddMessage)));
             }
             if (state is AddedToFavouriteState) {
               //toast for android ios and web only

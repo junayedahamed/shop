@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -75,11 +76,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     try {
-      if (!cart.contains(event.data)) {
+      final res = cart.contains(event.data);
+      log((!res).toString());
+      if (!res) {
+        log("message");
         cart.add(event.data);
-
-        emit(AddedToCartMsgState(cartAddMessage: ''));
-      } else {}
+        final result = await apiCalls.addItemToCart(
+          dotenv.env['USER_EMAIL'].toString(),
+          event.data.id,
+        );
+        emit(AddedToCartMsgState(cartAddMessage: result));
+        // emit()
+      } else {
+        emit(AddedToCartMsgState(cartAddMessage: "Already added in cart"));
+      }
     } catch (e) {
       emit(AddCartFailedState(errorMessage: e.toString()));
     }
