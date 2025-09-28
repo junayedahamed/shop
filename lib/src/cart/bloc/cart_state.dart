@@ -7,7 +7,17 @@ final class CartInitial extends CartState {}
 
 final class CartActionState extends CartState {}
 
-final class RemovedFromCartMsgState extends CartActionState {}
+final class RemovedFromCartMsgState extends CartActionState {
+  final String removedFromCartMsg;
+
+  RemovedFromCartMsgState({required this.removedFromCartMsg});
+}
+
+final class RemovedErrorCartMsgState extends CartActionState {
+  final String removedFromCartMsg;
+
+  RemovedErrorCartMsgState({required this.removedFromCartMsg});
+}
 
 // final class RemovedFromCartState extends CartState {}
 

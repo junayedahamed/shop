@@ -20,10 +20,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   FutureOr<void> removeFromCartEvent(
     RemoveFromCartEvent event,
     Emitter<CartState> emit,
-  ) {
-    cart.removeAt(event.index);
-    // emit(RemovedFromCartState());
-    // emit(RemovedFromCartMsgState());
+  ) async {
+    try {
+      final result = await apiCalls.rmoveItemFromCart(
+        dotenv.env['USER_EMAIL'].toString(),
+        event.index.id,
+      );
+      cart.remove(event.index);
+
+      emit(CartDataLoadedState(cartData: cart));
+      emit(RemovedFromCartMsgState(removedFromCartMsg: result));
+    } catch (e) {
+      emit(RemovedErrorCartMsgState(removedFromCartMsg: e.toString()));
+    }
   }
 
   FutureOr<void> cartInitialEvent(

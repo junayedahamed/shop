@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -77,9 +76,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     try {
       final res = cart.contains(event.data);
-      log((!res).toString());
+      // log((!res).toString());
       if (!res) {
-        log("message");
+        // log("message");
         cart.add(event.data);
         final result = await apiCalls.addItemToCart(
           dotenv.env['USER_EMAIL'].toString(),

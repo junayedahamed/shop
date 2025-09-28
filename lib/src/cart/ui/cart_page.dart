@@ -70,7 +70,7 @@ class _CartPageState extends State<CartPage> {
                     price: datacell.price.toString(),
                     deletePress: () {
                       //log(index.toString());
-                      cartBloc.add(RemoveFromCartEvent(index: index));
+                      cartBloc.add(RemoveFromCartEvent(index: datacell));
                     },
                   );
                 },

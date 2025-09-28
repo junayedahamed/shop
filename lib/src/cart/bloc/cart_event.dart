@@ -4,7 +4,7 @@ part of 'cart_bloc.dart';
 sealed class CartEvent {}
 
 final class RemoveFromCartEvent extends CartEvent {
-  final int index;
+  final ProductDataModel index;
 
   RemoveFromCartEvent({required this.index});
 }

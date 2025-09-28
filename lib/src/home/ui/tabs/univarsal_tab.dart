@@ -30,7 +30,11 @@ class _UniversalTabState extends State<UniversalTab> {
   void getAllNecessary() async {
     await Future.microtask(() {
       homeBloc.add(FoodInitialEvent());
+    });
+    await Future.microtask(() {
       favoriteBloc.add(FavoriteDataInitialEvent());
+    });
+    await Future.microtask(() {
       cartBloc.add(CartInitialEvent());
     });
   }

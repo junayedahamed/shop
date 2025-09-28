@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -137,7 +136,7 @@ class ApiCalls {
     try {
       // useremail = "testPostman";
       final url = Uri.parse("${dotenv.env['GET_ITEM_CART']}/$useremail");
-      log(dotenv.env['GET_ITEM_CART'].toString());
+      // log(dotenv.env['GET_ITEM_CART'].toString());
 
       final response = await http.get(
         url,
@@ -146,7 +145,7 @@ class ApiCalls {
         //   "Accept": "application/json",
         // },
       );
-      log(response.statusCode.toString());
+      // log(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         final res = jsonDecode(response.body);
@@ -166,6 +165,8 @@ class ApiCalls {
     }
   }
 
+  //add to cart
+  //add to cart
   //add to cart
 
   Future<String> addItemToCart(String useremail, String productId) async {
@@ -193,4 +194,143 @@ class ApiCalls {
       throw exc.handlePostApiException(e);
     }
   }
+
+  //remove from Cart
+  //remove from Cart
+  //remove from Cart
+  Future<String> rmoveItemFromCart(String useremail, String productId) async {
+    try {
+      final url = Uri.parse(
+        "${dotenv.env['REMOVE_FROM_CART']}/$productId/$useremail",
+      );
+      //   log(dotenv.env['ADDTOFAV'].toString());
+
+      final response = await http.delete(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      );
+      // log(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        final message = jsonDecode(response.body)['message'].toString();
+        return message;
+      } else {
+        return "Some Problem occoured";
+      }
+    } catch (e) {
+      throw exc.handleDeleteApiException(e);
+    }
+  }
+
+  ///Generics[ ApiCalls ]
+  ///
+  ///
+
+  // Future<List<ProductDataModel>> getItems({
+  //   required String url,
+  //   String? userEmail,
+  // }) async {
+  //   try {
+  //     final List<ProductDataModel> products = [];
+  //     // log(products.isEmpty.toString());
+  //     var uri = Uri.parse('');
+  //     if (userEmail == null) {
+  //       log((userEmail?.isEmpty).toString());
+  //       uri = Uri.parse(url);
+  //     } else {
+  //       uri = Uri.parse("$uri/$userEmail");
+  //       log(uri.toString());
+  //     }
+  //     print(uri);
+  //     final http.Response response = await http.get(
+  //       uri,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Accept": "application/json",
+  //       },
+  //     );
+  //     // log(response.statusCode.toString());
+  //     if (response.statusCode == 200) {
+  //       final values = jsonDecode(response.body);
+  //       for (int i = 0; i < values.length; i++) {
+  //         final data = ProductDataModel.fromMap(values[i]);
+  //         products.add(data);
+  //       }
+  //       // log(products.toString());
+  //       return products;
+  //     }
+  //     return [];
+  //   } catch (e) {
+  //     throw exc.handleGetApiException(e);
+  //   }
+  // }
+
+  // ///Post
+  // ///
+  // ///
+  // Future<String> addItem({
+  //   required String uri,
+  //   required String useremail,
+  //   required String productId,
+  // }) async {
+  //   try {
+  //     final url = Uri.parse(uri);
+  //     //   log(dotenv.env['ADDTOFAV'].toString());
+
+  //     final response = await http.post(
+  //       url,
+  //       headers: {
+  //         "Content-Type": "application/json", // 👈 important
+  //         "Accept": "application/json",
+  //       },
+  //       body: jsonEncode({"userEmail": useremail, "productId": productId}),
+  //     );
+  //     // log(response.statusCode.toString());
+
+  //     if (response.statusCode == 200) {
+  //       final message = jsonDecode(response.body)['message'].toString();
+  //       return message;
+  //     } else {
+  //       return "Some Problem occoured";
+  //     }
+  //   } catch (e) {
+  //     throw exc.handlePostApiException(e);
+  //   }
+  // }
+
+  // ///delete api
+  // ///
+  // ///
+
+  // Future<String> rmoveItem(
+  //   String uri,
+  //   String useremail,
+  //   String productId,
+  // ) async {
+  //   try {
+  //     final url = Uri.parse("$uri/$productId/$useremail");
+  //     //   log(dotenv.env['ADDTOFAV'].toString());
+
+  //     final response = await http.delete(
+  //       url,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Accept": "application/json",
+  //       },
+  //     );
+  //     // log(response.statusCode.toString());
+
+  //     if (response.statusCode == 200) {
+  //       final message = jsonDecode(response.body)['message'].toString();
+  //       return message;
+  //     } else {
+  //       return "Some Problem occoured";
+  //     }
+  //   } catch (e) {
+  //     throw exc.handleDeleteApiException(e);
+  //   }
+  // }
 }

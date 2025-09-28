@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,7 +21,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     RemoveFromFavEvent event,
     Emitter<FavoriteState> emit,
   ) async {
-    log(event.item.toString());
+    // log(event.item.toString());
     try {
       final result = await apiCalls.rmoveItemFromFavorite(
         dotenv.env['USER_EMAIL'].toString(),
@@ -34,7 +33,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
       emit(FavoriteRemovedMessageState(removedMessage: result));
     } catch (e) {
-      log(e.toString());
+      // log(e.toString());
       emit(FavoriteRemoveErrorState(message: e.toString()));
     }
   }
@@ -46,8 +45,11 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     try {
       // log("here${favorite.isEmpty}");
       if (favorite.isEmpty) {
+        // log(dotenv.env['GET_ITEM_FAV'].toString());
         emit(FavoriteInitialDataLoadingSate());
-        final favDatas = await apiCalls.getItemFromFavorite("useremailapp");
+        final favDatas = await apiCalls.getItemFromFavorite(
+          dotenv.env['USER_EMAIL'].toString(),
+        );
         favorite.addAll(favDatas);
         // log(favorite.toString());
         emit(FavoriteInitialDataLoadedSate(productData: favorite));
