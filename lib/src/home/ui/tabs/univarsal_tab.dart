@@ -77,7 +77,7 @@ class _UniversalTabState extends State<UniversalTab> {
         child: BlocConsumer<HomeBloc, HomeState>(
           bloc: homeBloc,
           listener: (context, state) {
-            if (state is AddedToCartState) {
+            if (state is AddedToCartMsgState) {
               //toast for android ios and web only
               // Fluttertoast.showToast(
               //   msg: 'Added to cart',

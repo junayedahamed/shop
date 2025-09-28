@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,7 +11,7 @@ part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  // final RuntimeData runtimeData = RuntimeData();
+  final ApiCalls apiCalls = ApiCalls();
   CartBloc() : super(CartInitial()) {
     on<RemoveFromCartEvent>(removeFromCartEvent);
     on<CartInitialEvent>(cartInitialEvent);
@@ -34,7 +33,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       if (cart.isEmpty) {
         emit(CartLoadingState());
-        final result = await ApiCalls.getCartItems(
+        final result = await apiCalls.getCartItems(
           dotenv.env['USER_EMAIL'].toString(),
         );
         // log(result.isEmpty.toString());
@@ -43,7 +42,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         }
         emit(CartDataLoadedState(cartData: cart));
       } else {
-        log("no call");
+        // log("no call");
         emit(CartDataLoadedState(cartData: cart));
       }
     } catch (e) {

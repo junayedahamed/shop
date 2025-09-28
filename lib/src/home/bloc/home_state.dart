@@ -27,4 +27,14 @@ final class AddedToFavouriteState extends HomeActionState {
   AddedToFavouriteState({required this.message});
 }
 
-final class AddedToCartState extends HomeActionState {}
+final class AddedToCartMsgState extends HomeActionState {
+  final String cartAddMessage;
+
+  AddedToCartMsgState({required this.cartAddMessage});
+}
+
+final class AddCartFailedState extends HomeActionState {
+  final String errorMessage;
+
+  AddCartFailedState({required this.errorMessage});
+}

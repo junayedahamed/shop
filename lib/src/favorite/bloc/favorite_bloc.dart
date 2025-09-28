@@ -12,11 +12,11 @@ part 'favorite_event.dart';
 part 'favorite_state.dart';
 
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
-  // final RuntimeData runtimeData = RuntimeData();
   FavoriteBloc() : super(FavoriteInitial()) {
     on<RemoveFromFavEvent>(removeFromFavEvent);
     on<FavoriteDataInitialEvent>(favoriteDataInitialEvent);
   }
+  final ApiCalls apiCalls = ApiCalls();
 
   FutureOr<void> removeFromFavEvent(
     RemoveFromFavEvent event,
@@ -24,7 +24,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   ) async {
     log(event.item.toString());
     try {
-      final result = await ApiCalls.rmoveItemFromFavorite(
+      final result = await apiCalls.rmoveItemFromFavorite(
         dotenv.env['USER_EMAIL'].toString(),
         event.item.id,
       );
@@ -47,7 +47,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       // log("here${favorite.isEmpty}");
       if (favorite.isEmpty) {
         emit(FavoriteInitialDataLoadingSate());
-        final favDatas = await ApiCalls.getItemFromFavorite("useremailapp");
+        final favDatas = await apiCalls.getItemFromFavorite("useremailapp");
         favorite.addAll(favDatas);
         // log(favorite.toString());
         emit(FavoriteInitialDataLoadedSate(productData: favorite));

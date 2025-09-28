@@ -20,6 +20,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   // final RuntimeData runtimeData = RuntimeData();
+  final ApiCalls apiCalls = ApiCalls();
   //food initial fetch event
   FutureOr<void> foodInitialEvent(
     FoodInitialEvent event,
@@ -29,7 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (products.isEmpty) {
         emit(FoodLoadingState());
 
-        final d = await ApiCalls.getData();
+        final d = await apiCalls.getData();
 
         products.addAll(d);
 
@@ -54,7 +55,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final res = favorite.contains(event.data);
 
       if (!res) {
-        final response = await ApiCalls.addItemToFavorite(
+        final response = await apiCalls.addItemToFavorite(
           dotenv.env['USER_EMAIL'].toString(),
           event.data.id,
         );
@@ -69,9 +70,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  FutureOr<void> addToCartEvent(AddToCartEvent event, Emitter<HomeState> emit) {
-    emit(AddedToCartState());
-    cart.add(event.data);
+  FutureOr<void> addToCartEvent(
+    AddToCartEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    try {
+      if (!cart.contains(event.data)) {
+        cart.add(event.data);
+
+        emit(AddedToCartMsgState(cartAddMessage: ''));
+      } else {}
+    } catch (e) {
+      emit(AddCartFailedState(errorMessage: e.toString()));
+    }
   }
 
   //on refresh
@@ -83,7 +94,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       // final List<ProductDataModel> products = [];
       emit(FoodLoadingState());
-      products.addAll(await ApiCalls.getData());
+      products.addAll(await apiCalls.getData());
       // log(products.toString());
       emit(FoodLoadedState(data: products));
     } catch (e) {

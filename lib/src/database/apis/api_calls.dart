@@ -2,17 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'dart:io';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:ocad/src/database/apis/exceptions.dart';
 
 import 'package:ocad/src/model/product_model/product_model.dart';
 
 class ApiCalls {
-  ApiCalls._();
+  // ApiCalls._();
 
-  static Future<List<ProductDataModel>> getData() async {
+  final Exceptions exc = Exceptions();
+  Future<List<ProductDataModel>> getData() async {
     try {
       final List<ProductDataModel> products = [];
       // log(products.isEmpty.toString());
@@ -29,19 +29,14 @@ class ApiCalls {
         return products;
       }
       return [];
-    } on SocketException catch (x) {
-      throw {'message': "No Internet ", 'err': x.message};
     } catch (e) {
-      throw Exception("Unknown error: $e");
+      throw exc.handleGetApiException(e);
     }
   }
 
   //add to favorite
 
-  static Future<String> addItemToFavorite(
-    String useremail,
-    String productId,
-  ) async {
+  Future<String> addItemToFavorite(String useremail, String productId) async {
     try {
       final url = Uri.parse("${dotenv.env['ADDTOFAV']}");
       //   log(dotenv.env['ADDTOFAV'].toString());
@@ -63,24 +58,13 @@ class ApiCalls {
         return "Some Problem occoured";
       }
     } catch (e) {
-      if (e is SocketException) {
-        if (e.osError?.message.contains("Failed host lookup") ?? false) {
-          throw "Could not reach the server. Please try again later.";
-        }
-        throw "Please check your network Connection.";
-      } else if (e is TimeoutException) {
-        throw "Request timed out. Please try again.";
-      } else if (e is FormatException) {
-        throw "Invalid response from server.";
-      } else {
-        throw "Unexpected error occurred. Please try again.";
-      }
+      throw exc.handlePostApiException(e);
     }
   }
 
   //remove from favorite
 
-  static Future<String> rmoveItemFromFavorite(
+  Future<String> rmoveItemFromFavorite(
     String useremail,
     String productId,
   ) async {
@@ -106,25 +90,12 @@ class ApiCalls {
         return "Some Problem occoured";
       }
     } catch (e) {
-      if (e is SocketException) {
-        if (e.osError?.message.contains("Failed host lookup") ?? false) {
-          throw "Could not reach the server. Please try again later.";
-        }
-        throw "Please check your network Connection.";
-      } else if (e is TimeoutException) {
-        throw "Request timed out. Please try again.";
-      } else if (e is FormatException) {
-        throw "Invalid response from server.";
-      } else {
-        throw "Unexpected error occurred. Please try again.";
-      }
+      throw exc.handleDeleteApiException(e);
     }
   }
 
   //get item of favorite
-  static Future<List<ProductDataModel>> getItemFromFavorite(
-    String useremail,
-  ) async {
+  Future<List<ProductDataModel>> getItemFromFavorite(String useremail) async {
     try {
       final url = Uri.parse("${dotenv.env['GET_ITEM_FAV']}/$useremail");
       //   log(dotenv.env['ADDTOFAV'].toString());
@@ -152,20 +123,7 @@ class ApiCalls {
         return [];
       }
     } catch (e) {
-      if (e is SocketException) {
-        if (e.osError?.message.contains("Failed host lookup") ?? false) {
-          throw Exception(
-            "Could not reach the server. Please try again later.",
-          );
-        }
-        throw Exception("No internet connection. Please check your network.");
-      } else if (e is TimeoutException) {
-        throw Exception("Request timed out. Please try again.");
-      } else if (e is FormatException) {
-        throw Exception("Invalid response from server.");
-      } else {
-        throw Exception("Unexpected error occurred. Please try again.");
-      }
+      throw exc.handleGetApiException(e);
     }
   }
 
@@ -175,7 +133,7 @@ class ApiCalls {
   //-------------- Cart Operations ---------------
 
   //get all cart items
-  static Future<List<ProductDataModel>> getCartItems(String useremail) async {
+  Future<List<ProductDataModel>> getCartItems(String useremail) async {
     try {
       // useremail = "testPostman";
       final url = Uri.parse("${dotenv.env['GET_ITEM_CART']}/$useremail");
@@ -204,20 +162,11 @@ class ApiCalls {
         return [];
       }
     } catch (e) {
-      if (e is SocketException) {
-        if (e.osError?.message.contains("Failed host lookup") ?? false) {
-          throw Exception(
-            "Could not reach the server. Please try again later.",
-          );
-        }
-        throw Exception("No internet connection. Please check your network.");
-      } else if (e is TimeoutException) {
-        throw Exception("Request timed out. Please try again.");
-      } else if (e is FormatException) {
-        throw Exception("Invalid response from server.");
-      } else {
-        throw Exception("Unexpected error occurred. Please try again.");
-      }
+      throw exc.handleGetApiException(e);
     }
   }
+
+  //add to cart
+
+  //post api exceptions
 }
