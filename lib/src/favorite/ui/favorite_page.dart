@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/favorite/bloc/favorite_bloc.dart';
 import 'package:ocad/src/favorite/ui/widget/favourite_data_card.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -44,7 +45,32 @@ class _FavoritePageState extends State<FavoritePage> {
           // print(state);
           switch (state) {
             case FavoriteInitialDataLoadingSate():
-              return Center(child: CircularProgressIndicator());
+              return Skeletonizer(
+                effect: ShimmerEffect(),
+                enabled: true,
+                enableSwitchAnimation: true,
+
+                child: ListView.builder(
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: FavouriteDataCard(
+                        addToCart: () {
+                          // homeBloc.add(AddToCartEvent(data: datacell));
+                        },
+                        unfavoritePress: () {
+                          // favoriteBloc.add(RemoveFromFavEvent(item: datacell));
+                        },
+
+                        onFavProductPress: () {},
+                        price: "datacell.price".toString(),
+                        productName: "datacell.productname",
+                      ),
+                    );
+                  },
+                ),
+              );
 
             case FavoriteInitialDataLoadedSate():
               final data = state.productData.reversed.toList();

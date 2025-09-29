@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/cart/bloc/cart_bloc.dart';
 import 'package:ocad/src/cart/ui/widget/cart_item_card.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -43,7 +44,27 @@ class _CartPageState extends State<CartPage> {
         switch (state) {
           case CartLoadingState():
             //log("all ok");
-            return Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              effect: ShimmerEffect(),
+              justifyMultiLineText: true,
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return CartItemCard(
+                    onCartProductPress: () {
+                      //navigate another page
+                    },
+                    productName: "datacell.productname",
+                    price: "datacell.price.toString()",
+                    deletePress: () {
+                      //log(index.toString());
+                      // cartBloc.add(RemoveFromCartEvent(index: ));
+                    },
+                  );
+                },
+              ),
+            );
 
           case CartDataLoadedState():
             //log("all loaded");
