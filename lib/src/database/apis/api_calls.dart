@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -11,26 +12,94 @@ class ApiCalls {
   // ApiCalls._();
 
   final Exceptions exc = Exceptions();
+  // int _maxtry = 10;
+  // Future<List<ProductDataModel>> getData() async {
+  //   int attempt = 0;
+  //   while (attempt < _maxtry) {
+  //     attempt++;
+  //     try {
+  //       final List<ProductDataModel> products = [];
+  //       // log(products.isEmpty.toString());
+  //       final uri = Uri.parse("${dotenv.env['GET_PRODUCTS']}");
+  //       final http.Response response = await http.get(uri);
+  //       // log(response.statusCode.toString());
+  //       if (response.statusCode == 200) {
+  //         final values = jsonDecode(response.body);
+  //         // for (int i = 0; i < values.length; i++) {
+  //         //   final data = ProductDataModel.fromMap(values[i]);
+  //         //   products.add(data);
+  //         // }
+  //         products.addAll(
+  //           values.map<ProductDataModel>((item) {
+  //             return ProductDataModel.fromMap(item);
+  //           }).toList(),
+  //         );
+  //         // log(products.toString());
+  //         return products;
+  //       }
+  //       return [];
+  //     } catch (e) {
+  //       if (e is SocketException) {
+  //         if (e.osError?.message.contains("Failed host lookup") ?? false) {
+  //           throw "Could not reach the server. Please try again later.";
+  //         }
+  //         throw "No internet connection.";
+  //       } else if (e is TimeoutException) {
+  //         throw "Request timed out. Please try again.";
+  //       } else if (e is FormatException) {
+  //         throw "Invalid response from server.";
+  //       } else {
+  //         // throw "Unexpected error occurred. Please try again.";
+  //         rethrow;
+  //       }
+  //     }
+
+  //   }
+  //   return [];
+  // }
+
+  final int _maxTry = 5;
+
   Future<List<ProductDataModel>> getData() async {
-    try {
-      final List<ProductDataModel> products = [];
-      // log(products.isEmpty.toString());
-      final uri = Uri.parse("${dotenv.env['GET_PRODUCTS']}");
-      final http.Response response = await http.get(uri);
-      // log(response.statusCode.toString());
-      if (response.statusCode == 200) {
-        final values = jsonDecode(response.body);
-        for (int i = 0; i < values.length; i++) {
-          final data = ProductDataModel.fromMap(values[i]);
-          products.add(data);
+    int attempt = 0;
+
+    while (attempt < _maxTry) {
+      attempt++;
+      try {
+        final uri = Uri.parse("${dotenv.env['GET_PRODUCTS']}");
+        final response = await http
+            .get(uri)
+            .timeout(const Duration(seconds: 10));
+
+        if (response.statusCode == 200) {
+          final values = jsonDecode(response.body);
+          return values
+              .map<ProductDataModel>((v) => ProductDataModel.fromMap(v))
+              .toList();
+        } else {
+          throw Exception("Server error: ${response.statusCode}");
         }
-        // log(products.toString());
-        return products;
+      } on SocketException catch (e) {
+        if (attempt >= _maxTry) {
+          if (e.osError?.message.contains("Failed host lookup") ?? false) {
+            throw "Could not reach the server. Please try again later.";
+          }
+          throw "No internet connection.";
+        }
+        await Future.delayed(const Duration(seconds: 3));
+      } on TimeoutException {
+        if (attempt >= _maxTry) {
+          throw "Request timed out. Please try again.";
+        }
+        await Future.delayed(const Duration(seconds: 3));
+      } on FormatException {
+        throw "Invalid response from server.";
+      } catch (e) {
+        rethrow; // unexpected errors → don't retry
       }
-      return [];
-    } catch (e) {
-      throw exc.handleGetApiException(e);
     }
+
+    return []; // fallback if somehow all retries fail
   }
 
   //add to favorite
