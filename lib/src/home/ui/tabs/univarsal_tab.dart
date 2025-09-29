@@ -5,6 +5,7 @@ import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
 import 'package:ocad/src/model/product_model/product_model.dart';
 import 'package:ocad/src/util/responsive_util.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../favorite/bloc/favorite_bloc.dart';
 
@@ -111,7 +112,30 @@ class _UniversalTabState extends State<UniversalTab> {
           builder: (context, state) {
             switch (state) {
               case FoodLoadingState():
-                return Center(child: CircularProgressIndicator());
+                return Skeletonizer(
+                  enabled: true,
+                  effect: ShimmerEffect(),
+                  enableSwitchAnimation: true,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossCount,
+                      crossAxisSpacing: 15,
+
+                      childAspectRatio: 0.66,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ProductCard(
+                        description: 'Loading...',
+                        iconSize: iconSize,
+                        name: 'Loading...',
+                        price: 0.0,
+                        cartPress: () {},
+                        favoritePress: () {},
+                      );
+                    },
+                  ),
+                );
 
               case FoodLoadFailedState():
                 final errorMsg = state.errorMessage;
@@ -156,6 +180,7 @@ class _UniversalTabState extends State<UniversalTab> {
                     );
                   },
                 );
+
               default:
                 return SizedBox.shrink();
             }

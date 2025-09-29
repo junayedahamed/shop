@@ -20,15 +20,15 @@ class Exceptions {
   Never handleGetApiException(dynamic e) {
     if (e is SocketException) {
       if (e.osError?.message.contains("Failed host lookup") ?? false) {
-        throw Exception("Could not reach the server. Please try again later.");
+        throw "Could not reach the server. Please try again later.";
       }
-      throw Exception("No internet connection. Please check your network.");
+      throw "No internet connection.";
     } else if (e is TimeoutException) {
-      throw Exception("Request timed out. Please try again.");
+      throw "Request timed out. Please try again.";
     } else if (e is FormatException) {
-      throw Exception("Invalid response from server.");
+      throw "Invalid response from server.";
     } else {
-      throw Exception("Unexpected error occurred. Please try again.");
+      throw "Unexpected error occurred. Please try again.";
     }
   }
 

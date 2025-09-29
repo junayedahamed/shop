@@ -43,6 +43,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       // log((e is Map).toString());
       if (e is Map) {
         emit(FoodLoadFailedState(errorMessage: e['message']));
+      } else {
+        emit(FoodLoadFailedState(errorMessage: e.toString()));
       }
     }
   }
@@ -109,6 +111,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e) {
       if (e is Map) {
         emit(FoodLoadFailedState(errorMessage: e['message']));
+      } else {
+        emit(FoodLoadFailedState(errorMessage: e.toString()));
       }
     }
   }
