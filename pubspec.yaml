@@ -38,7 +38,7 @@ dependencies:
   http: ^1.5.0
   bloc: ^9.0.0
   meta: ^1.16.0
-  fluttertoast: ^9.0.0
+  # fluttertoast: ^9.0.0
   flutter_dotenv: ^6.0.0
   skeletonizer: ^2.1.0+1
 
