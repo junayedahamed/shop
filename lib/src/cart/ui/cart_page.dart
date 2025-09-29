@@ -79,7 +79,7 @@ class _CartPageState extends State<CartPage> {
           case CartDataLoadErrorState():
             return Center(child: Text("Smoething went wrong"));
           default:
-            return Center(child: Text(((state)).toString()));
+            return SizedBox.shrink();
         }
       },
     );
