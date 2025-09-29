@@ -48,7 +48,10 @@ class _CartPageState extends State<CartPage> {
               enabled: true,
               effect: ShimmerEffect(),
               justifyMultiLineText: true,
-              child: ListView.builder(
+              child: ListView.separated(
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 10);
+                },
                 itemCount: 5,
                 itemBuilder: (context, index) {
                   return CartItemCard(

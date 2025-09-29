@@ -24,94 +24,95 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocConsumer<FavoriteBloc, FavoriteState>(
-        bloc: favoriteBloc,
-        buildWhen: (previous, current) => current is! FavoriteActionState,
-        listenWhen: (previous, current) => current is FavoriteActionState,
-        listener: (context, state) {
-          if (state is FavoriteRemovedMessageState) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.removedMessage)));
-          }
-          if (state is FavoriteRemoveErrorState) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
-          }
-        },
-        builder: (context, state) {
-          // print(state);
-          switch (state) {
-            case FavoriteInitialDataLoadingSate():
-              return Skeletonizer(
-                effect: ShimmerEffect(),
-                enabled: true,
-                enableSwitchAnimation: true,
+    return BlocConsumer<FavoriteBloc, FavoriteState>(
+      bloc: favoriteBloc,
+      buildWhen: (previous, current) => current is! FavoriteActionState,
+      listenWhen: (previous, current) => current is FavoriteActionState,
+      listener: (context, state) {
+        if (state is FavoriteRemovedMessageState) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.removedMessage)));
+        }
+        if (state is FavoriteRemoveErrorState) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      builder: (context, state) {
+        // print(state);
+        switch (state) {
+          case FavoriteInitialDataLoadingSate():
+            return Skeletonizer(
+              effect: ShimmerEffect(),
+              enabled: true,
+              enableSwitchAnimation: true,
 
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: FavouriteDataCard(
-                        addToCart: () {
-                          // homeBloc.add(AddToCartEvent(data: datacell));
-                        },
-                        unfavoritePress: () {
-                          // favoriteBloc.add(RemoveFromFavEvent(item: datacell));
-                        },
+              child: ListView.separated(
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 10);
+                },
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: FavouriteDataCard(
+                      addToCart: () {
+                        // homeBloc.add(AddToCartEvent(data: datacell));
+                      },
+                      unfavoritePress: () {
+                        // favoriteBloc.add(RemoveFromFavEvent(item: datacell));
+                      },
 
-                        onFavProductPress: () {},
-                        price: "datacell.price".toString(),
-                        productName: "datacell.productname",
-                      ),
-                    );
-                  },
-                ),
+                      onFavProductPress: () {},
+                      price: "datacell.price".toString(),
+                      productName: "datacell.productname",
+                    ),
+                  );
+                },
+              ),
+            );
+
+          case FavoriteInitialDataLoadedSate():
+            final data = state.productData.reversed.toList();
+            // log(data.toString());
+            if (data.isNotEmpty) {
+              return ListView.separated(
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 10);
+                },
+
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  final datacell = data[index];
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: FavouriteDataCard(
+                      addToCart: () {
+                        homeBloc.add(AddToCartEvent(data: datacell));
+                      },
+                      unfavoritePress: () {
+                        favoriteBloc.add(RemoveFromFavEvent(item: datacell));
+                      },
+
+                      onFavProductPress: () {},
+                      price: datacell.price.toString(),
+                      productName: datacell.productname,
+                    ),
+                  );
+                },
               );
-
-            case FavoriteInitialDataLoadedSate():
-              final data = state.productData.reversed.toList();
-              // log(data.toString());
-              if (data.isNotEmpty) {
-                return ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return SizedBox(height: 10);
-                  },
-
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    final datacell = data[index];
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: FavouriteDataCard(
-                        addToCart: () {
-                          homeBloc.add(AddToCartEvent(data: datacell));
-                        },
-                        unfavoritePress: () {
-                          favoriteBloc.add(RemoveFromFavEvent(item: datacell));
-                        },
-
-                        onFavProductPress: () {},
-                        price: datacell.price.toString(),
-                        productName: datacell.productname,
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return Center(child: Text("Nothing in favorite"));
-              }
-            case FavoriteInitialDataLoadErrorSate():
-              return Center(child: Text(state.errormessage));
-            default:
-              return SizedBox.shrink();
-          }
-        },
-      ),
+            } else {
+              return Center(child: Text("Nothing in favorite"));
+            }
+          case FavoriteInitialDataLoadErrorSate():
+            return Center(child: Text(state.errormessage));
+          default:
+            return SizedBox.shrink();
+        }
+      },
     );
   }
 }
