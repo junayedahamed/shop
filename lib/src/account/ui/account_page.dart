@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:ocad/src/account/ui/widget/profile_tiles.dart';
 
@@ -16,7 +18,14 @@ class AccountPage extends StatelessWidget {
               maxRadius: 35,
               minRadius: 20,
               child: Image.network(
+                // errorBuilder: (context, error, stackTrace) {
+                //   return Icon(Icons.person, size: 30);
+                // },
                 "https://c9yois02lm.ufs.sh/f/RXJBrPvyVfAxYX3edhJSAb5pao2WXGiI8NF04zLZqOKJlnyt",
+                // loadingBuilder: (context, child, loadingProgress) {
+                //   log((loadingProgress?.expectedTotalBytes).toString());
+                //   return CircularProgressIndicator();
+                // },
               ),
             ),
           ),

@@ -25,31 +25,61 @@ class _NavigatorPageState extends State<NavigatorPage> {
     return Scaffold(
       appBar: AppBar(title: Text("Shop")),
       body: pages[index],
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-            backgroundColor: Colors.cyanAccent,
-            tooltip: 'Home',
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: '',
+      //       backgroundColor: Colors.cyanAccent,
+      //       tooltip: 'Home',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.favorite),
+      //       label: '',
+      //       tooltip: 'Favorite',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.shopping_cart),
+      //       label: '',
+      //       tooltip: 'Cart',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person),
+      //       label: '',
+      //       tooltip: 'Account',
+      //     ),
+      //   ],
+      //   onTap: changeSelection,
+      // ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: index,
+        onDestinationSelected: (value) {
+          setState(() {
+            index = value;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: "Home",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: '',
-            tooltip: 'Favorite',
+          NavigationDestination(
+            icon: Icon(Icons.favorite_outline),
+            selectedIcon: Icon(Icons.favorite),
+            label: "Favorite",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: '',
-            tooltip: 'Cart',
+          NavigationDestination(
+            icon: Icon(Icons.shopping_cart_outlined),
+            selectedIcon: Icon(Icons.shopping_cart),
+            label: "Cart",
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '',
-            tooltip: 'Account',
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: "Account",
           ),
         ],
-        onTap: changeSelection,
       ),
     );
   }
