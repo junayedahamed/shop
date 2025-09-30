@@ -70,7 +70,7 @@ class ProductCard extends StatelessWidget {
                         Text("Price:$price"),
                         IconButton(
                           onPressed: cartPress,
-                          icon: Icon(Icons.shopify, size: iconSize),
+                          icon: Icon(Icons.shopping_cart, size: iconSize),
                         ),
                       ],
                     ),

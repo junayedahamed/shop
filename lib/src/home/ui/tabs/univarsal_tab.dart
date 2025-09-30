@@ -183,7 +183,8 @@ class _UniversalTabState extends State<UniversalTab> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductDetailsPage(
-                              // product: datacell,
+                              product: datacell,
+                              isFavorite: favorited[index],
                             ),
                           ),
                         );

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/cart/bloc/cart_bloc.dart';
 import 'package:ocad/src/cart/ui/widget/cart_item_card.dart';
+import 'package:ocad/src/database/demo_data.dart';
+import 'package:ocad/src/product_details/ui/widget/product_details_page.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CartPage extends StatefulWidget {
@@ -88,7 +90,15 @@ class _CartPageState extends State<CartPage> {
                   final datacell = data[index];
                   return CartItemCard(
                     onCartProductPress: () {
-                      //navigate another page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailsPage(
+                            product: datacell,
+                            isFavorite: favorite.contains(datacell),
+                          ),
+                        ),
+                      );
                     },
                     productName: datacell.productname,
                     price: datacell.price.toString(),
