@@ -23,7 +23,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Shop")),
+      appBar: AppBar(title: Text("eShop")),
       body: pages[index],
       // bottomNavigationBar: BottomNavigationBar(
       //   items: [
