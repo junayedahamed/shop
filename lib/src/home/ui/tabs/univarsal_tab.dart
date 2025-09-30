@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/cart/bloc/cart_bloc.dart';
+import 'package:ocad/src/database/demo_data.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
 import 'package:ocad/src/model/product_model/product_model.dart';
@@ -117,6 +118,7 @@ class _UniversalTabState extends State<UniversalTab> {
                   effect: ShimmerEffect(),
                   enableSwitchAnimation: true,
                   child: GridView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: crossCount,
                       crossAxisSpacing: 15,
@@ -126,6 +128,7 @@ class _UniversalTabState extends State<UniversalTab> {
                     ),
                     itemBuilder: (context, index) {
                       return ProductCard(
+                        isFavorite: false,
                         description: 'Loading...',
                         iconSize: iconSize,
                         name: 'Loading...',
@@ -139,11 +142,23 @@ class _UniversalTabState extends State<UniversalTab> {
 
               case FoodLoadFailedState():
                 final errorMsg = state.errorMessage;
-                return Center(child: Text(errorMsg.toString()));
+                return Center(
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(child: Text(errorMsg.toString())),
+                    ),
+                  ),
+                );
               case FoodLoadedState():
                 final data = state.data
                     .where((element) => element.category == widget.category)
                     .toList();
+                final favorited = data
+                    .map((e) => favorite.contains(e))
+                    .toList();
+                // log(favorited.toString());
                 // log(data.toString());
                 return GridView.builder(
                   controller: scrollController,
@@ -166,6 +181,7 @@ class _UniversalTabState extends State<UniversalTab> {
                         // log(datacell.id);
                       },
                       child: ProductCard(
+                        isFavorite: favorited[index],
                         description: datacell.description,
                         iconSize: iconSize,
                         name: datacell.productname,

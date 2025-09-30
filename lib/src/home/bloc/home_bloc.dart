@@ -63,7 +63,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         );
         // log(favorite.isEmpty.toString());
         emit(AddedToFavouriteState(message: response));
+
         favorite.add(event.data);
+        emit(FoodLoadedState(data: products));
       } else {
         emit(AddedToFavouriteState(message: "Already added in favorite"));
       }
@@ -105,6 +107,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       // final List<ProductDataModel> products = [];
       emit(FoodLoadingState());
+      products.clear();
       products.addAll(await apiCalls.getData());
       // log(products.toString());
       emit(FoodLoadedState(data: products));

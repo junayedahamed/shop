@@ -9,11 +9,13 @@ class ProductCard extends StatelessWidget {
     required this.iconSize,
     required this.description,
     required this.price,
+    required this.isFavorite,
   });
   final String name, description;
   final double iconSize;
   final double price;
   final VoidCallback cartPress, favoritePress;
+  final bool isFavorite;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,10 +28,25 @@ class ProductCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
           child: Stack(
             alignment: AlignmentGeometry.topRight,
+
             children: [
-              IconButton(
-                onPressed: favoritePress,
-                icon: Icon(Icons.favorite_outline, size: iconSize),
+              Container(
+                height: iconSize + 13,
+                width: iconSize + 13,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Center(
+                  child: IconButton(
+                    onPressed: favoritePress,
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_outline,
+                      color: isFavorite ? Colors.pink : null,
+                      size: iconSize,
+                    ),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(4.0),
