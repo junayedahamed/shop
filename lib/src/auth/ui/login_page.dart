@@ -72,6 +72,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {},
+
                       child: Text(
                         "Forgot password?",
                         style: TextStyle(

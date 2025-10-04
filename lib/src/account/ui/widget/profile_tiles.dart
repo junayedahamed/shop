@@ -29,14 +29,18 @@ class ProfileTiles extends StatelessWidget {
               Row(
                 spacing: 10,
                 children: [
-                  Icon(leadingIcon, size: 22, color: Colors.grey),
+                  Icon(leadingIcon, size: 22, color: Colors.grey.shade700),
                   Text(
                     tileName,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
-              Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.grey.shade700,
+                size: 20,
+              ),
             ],
           ),
         ),

@@ -51,8 +51,8 @@ class AccountPage extends StatelessWidget {
                 ontap: () {},
               ),
               ProfileTiles(
-                leadingIcon: Icons.edit,
-                tileName: "Update Information",
+                leadingIcon: Icons.shopping_bag_outlined,
+                tileName: "My orders",
                 ontap: () {},
               ),
 
