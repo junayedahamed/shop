@@ -1,4 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ocad/src/auth/bloc/auth_bloc.dart';
+import 'package:ocad/src/auth/ui/registration_page.dart';
 import 'package:ocad/src/auth/ui/widget/cuistom_text_field.dart';
 import 'package:ocad/src/auth/ui/widget/custom_button.dart';
 
@@ -8,6 +12,7 @@ class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+  final AuthBloc authBloc = AuthBloc();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,25 +90,40 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 12),
-                CustomTextField(
-                  controller: passwordController,
-                  validator: (String? value) {
-                    if (passwordController.text.isEmpty) {
-                      return "Password is required";
-                    }
-                    return null;
-                  },
-                  fillcolor: Colors.white,
-                  hoverColor: Colors.white,
-                  enabledBorderColor: Colors.blueGrey.shade600,
-                  filled: true,
+                BlocConsumer<AuthBloc, AuthState>(
+                  bloc: authBloc,
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return CustomTextField(
+                      controller: passwordController,
+                      validator: (String? value) {
+                        if (passwordController.text.isEmpty) {
+                          return "Password is required";
+                        }
+                        return null;
+                      },
+                      fillcolor: Colors.white,
+                      hoverColor: Colors.white,
+                      enabledBorderColor: Colors.blueGrey.shade600,
+                      filled: true,
 
-                  obscureText: true,
-                  focusedBorderColor: _focusedBorderColor,
-                  suffixIcon: GestureDetector(
-                    onTap: () {},
-                    child: Icon(Icons.visibility_off_outlined, size: 22),
-                  ),
+                      obscureText: state is ShowPasswordStateLogin
+                          ? !state.isShow
+                          : true,
+                      focusedBorderColor: _focusedBorderColor,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          authBloc.add(ShowPasswordEventLogin());
+                        },
+                        icon: Icon(
+                          state is ShowPasswordStateLogin && state.isShow
+                              ? Icons.visibility
+                              : Icons.visibility_off_outlined,
+                          size: 22,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: 12),
                 Row(
@@ -146,6 +166,39 @@ class LoginPage extends StatelessWidget {
                         fontSize: 18,
                         color: Colors.white,
                       ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 15),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Don't have an account? ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.blueGrey.shade700,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: "Sign up",
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegistrationPage(),
+                                ),
+                                (route) => false,
+                              );
+                            },
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff9e733e),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
