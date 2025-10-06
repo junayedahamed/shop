@@ -336,7 +336,7 @@ class ApiCalls {
             body['user'] is List &&
             body['user'].isNotEmpty) {
           final user = UserModel.fromJson(body['user'][0]);
-          return LoginResult(user: user);
+          return LoginResult(user: user, token: token);
         } else {
           return LoginResult(message: body['message'] ?? "No user found");
         }
