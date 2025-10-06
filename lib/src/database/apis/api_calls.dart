@@ -4,9 +4,11 @@ import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:ocad/src/auth/login_result_model/login_result_model.dart';
 import 'package:ocad/src/database/apis/exceptions.dart';
 
 import 'package:ocad/src/models/product_model/product_model.dart';
+import 'package:ocad/src/models/user_model/user_model.dart';
 
 class ApiCalls {
   // ApiCalls._();
@@ -294,112 +296,66 @@ class ApiCalls {
     }
   }
 
-  ///Generics[ ApiCalls ]
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS [LOGIN USER] ----------------------
+
+  Future<LoginResult> loginUser(String email, String password) async {
+    final url = Uri.parse("${dotenv.env['USER_LOGIN']}");
+    final urlJwt = Uri.parse("${dotenv.env['JWT_GENERATE']}");
+
+    try {
+      final tokenRes = await http.post(
+        urlJwt,
+        body: jsonEncode({"email": email}),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (tokenRes.statusCode != 200) {
+        return LoginResult(message: "Something went wrong");
+      }
+
+      final token = jsonDecode(tokenRes.body)['token'];
+
+      final res = await http.post(
+        url,
+        body: jsonEncode({"email": email, "password": password}),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (res.statusCode == 200) {
+        final body = jsonDecode(res.body);
+
+        if (body['user'] != null &&
+            body['user'] is List &&
+            body['user'].isNotEmpty) {
+          final user = UserModel.fromJson(body['user'][0]);
+          return LoginResult(user: user);
+        } else {
+          return LoginResult(message: body['message'] ?? "No user found");
+        }
+      } else {
+        return LoginResult(message: "Login failed (${res.statusCode})");
+      }
+    } catch (e) {
+      // You can log the error if needed
+      return LoginResult(message: "Something went wrong: $e");
+    }
+  }
+
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
   ///
-  ///
+  Future<void> createUser(String name, String email, String password) async {}
 
-  // Future<List<ProductDataModel>> getItems({
-  //   required String url,
-  //   String? userEmail,
-  // }) async {
-  //   try {
-  //     final List<ProductDataModel> products = [];
-  //     // log(products.isEmpty.toString());
-  //     var uri = Uri.parse('');
-  //     if (userEmail == null) {
-  //       log((userEmail?.isEmpty).toString());
-  //       uri = Uri.parse(url);
-  //     } else {
-  //       uri = Uri.parse("$uri/$userEmail");
-  //       log(uri.toString());
-  //     }
-  //     print(uri);
-  //     final http.Response response = await http.get(
-  //       uri,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Accept": "application/json",
-  //       },
-  //     );
-  //     // log(response.statusCode.toString());
-  //     if (response.statusCode == 200) {
-  //       final values = jsonDecode(response.body);
-  //       for (int i = 0; i < values.length; i++) {
-  //         final data = ProductDataModel.fromMap(values[i]);
-  //         products.add(data);
-  //       }
-  //       // log(products.toString());
-  //       return products;
-  //     }
-  //     return [];
-  //   } catch (e) {
-  //     throw exc.handleGetApiException(e);
-  //   }
-  // }
-
-  // ///Post
-  // ///
-  // ///
-  // Future<String> addItem({
-  //   required String uri,
-  //   required String useremail,
-  //   required String productId,
-  // }) async {
-  //   try {
-  //     final url = Uri.parse(uri);
-  //     //   log(dotenv.env['ADDTOFAV'].toString());
-
-  //     final response = await http.post(
-  //       url,
-  //       headers: {
-  //         "Content-Type": "application/json", // 👈 important
-  //         "Accept": "application/json",
-  //       },
-  //       body: jsonEncode({"userEmail": useremail, "productId": productId}),
-  //     );
-  //     // log(response.statusCode.toString());
-
-  //     if (response.statusCode == 200) {
-  //       final message = jsonDecode(response.body)['message'].toString();
-  //       return message;
-  //     } else {
-  //       return "Some Problem occoured";
-  //     }
-  //   } catch (e) {
-  //     throw exc.handlePostApiException(e);
-  //   }
-  // }
-
-  // ///delete api
-  // ///
-  // ///
-
-  // Future<String> rmoveItem(
-  //   String uri,
-  //   String useremail,
-  //   String productId,
-  // ) async {
-  //   try {
-  //     final url = Uri.parse("$uri/$productId/$useremail");
-  //     //   log(dotenv.env['ADDTOFAV'].toString());
-
-  //     final response = await http.delete(
-  //       url,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Accept": "application/json",
-  //       },
-  //     );
-  //     // log(response.statusCode.toString());
-
-  //     if (response.statusCode == 200) {
-  //       final message = jsonDecode(response.body)['message'].toString();
-  //       return message;
-  //     } else {
-  //       return "Some Problem occoured";
-  //     }
-  //   } catch (e) {
-  //     throw exc.handleDeleteApiException(e);
-  //   }
-  // }
+  ///----------------------Auth API CALLS ----------------------
+  ///----------------------Auth API CALLS ----------------------
 }

@@ -4,7 +4,7 @@ class UserModel {
   final String email;
   final DateTime createdAt;
   final String userid;
-  final String refreshtoken;
+  // final String refreshtoken;
   final String? location;
 
   UserModel({
@@ -13,7 +13,7 @@ class UserModel {
     required this.email,
     required this.createdAt,
     required this.userid,
-    required this.refreshtoken,
+    // required this.refreshtoken,
     this.location,
   });
 
@@ -24,7 +24,7 @@ class UserModel {
     email: json['email'] ?? '',
     createdAt: DateTime.parse(json['created_at']),
     userid: json['userid'] ?? '',
-    refreshtoken: json['refreshtoken'] ?? '',
+    // refreshtoken: json['refreshtoken'] ?? '',
     location: json['location'], // safe nullable assignment
   );
 
@@ -35,7 +35,7 @@ class UserModel {
     'email': email,
     'created_at': createdAt.toIso8601String(),
     'userid': userid,
-    'refreshtoken': refreshtoken,
+    // 'refreshtoken': refreshtoken,
     if (location != null) 'location': location, // only include if not null
   };
 }

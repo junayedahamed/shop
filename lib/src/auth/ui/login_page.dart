@@ -1,18 +1,42 @@
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocad/src/auth/bloc/auth_bloc.dart';
 import 'package:ocad/src/auth/ui/registration_page.dart';
 import 'package:ocad/src/auth/ui/widget/cuistom_text_field.dart';
-import 'package:ocad/src/auth/ui/widget/custom_button.dart';
+import 'package:ocad/src/auth/ui/widget/login_button.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final Color _focusedBorderColor = const Color(0xff9e723d);
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final _formkey = GlobalKey<FormState>();
+
   final AuthBloc authBloc = AuthBloc();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +100,13 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        // log(x)
+                        // log("Forgot password tapped");
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(content: Text("Forgot password tapped")),
+                        // );
+                      },
 
                       child: Text(
                         "Forgot password?",
@@ -126,48 +156,35 @@ class LoginPage extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 12),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: false,
-                      activeColor: Color(0xff9e733e),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        side: BorderSide(
-                          style: BorderStyle.solid,
-                          color: Colors.blueGrey.shade700,
-                          width: 0.8,
-                        ),
-                      ),
-                      onChanged: (value) {},
-                    ),
-                    Text(
-                      "Remember me",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                CustomButton(
-                  color: Color(0xff9e733e),
-                  onPress: () {
-                    if (_formkey.currentState!.validate()) {
-                      // Perform login action
-                    }
-                  },
-                  child: Center(
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                // Row(
+                //   children: [
+                //     Checkbox(
+                //       value: false,
+                //       activeColor: Color(0xff9e733e),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(4),
+                //         side: BorderSide(
+                //           style: BorderStyle.solid,
+                //           color: Colors.blueGrey.shade700,
+                //           width: 0.8,
+                //         ),
+                //       ),
+                //       onChanged: (value) {},
+                //     ),
+                //     Text(
+                //       "Remember me",
+                //       style: TextStyle(
+                //         fontSize: 14,
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                SizedBox(height: 16),
+                LoginButton(
+                  formkey: _formkey,
+                  emailController: emailController,
+                  passwordController: passwordController,
                 ),
 
                 SizedBox(height: 15),

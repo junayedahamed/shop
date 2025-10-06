@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ocad/src/auth/ui/login_page.dart';
-import 'package:ocad/src/navigator/navigator_page.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
@@ -20,8 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: NavigatorPage(),
-      // home: LoginPage(),
+      // home: NavigatorPage(),
+      home: LoginPage(),
     );
   }
 }
