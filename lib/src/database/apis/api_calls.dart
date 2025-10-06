@@ -353,9 +353,56 @@ class ApiCalls {
   ///----------------------Auth API CALLS ----------------------
   ///----------------------Auth API CALLS ----------------------
   ///----------------------Auth API CALLS ----------------------
-  ///
-  Future<void> createUser(String name, String email, String password) async {}
+  ///[ CREATE USER ]
+  Future<void> createUser(String name, String email, String password) async {
+    final url = Uri.parse("${dotenv.env['USER_REGISTER']}");
+
+    try {
+      final response = await http.post(
+        url,
+        body: jsonEncode({"name": name, "email": email, "password": password}),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode == 201) {
+        // User created successfully
+      } else {
+        // Handle error
+      }
+    } catch (e) {
+      throw exc.handlePostApiException(e);
+    }
+  }
 
   ///----------------------Auth API CALLS ----------------------
   ///----------------------Auth API CALLS ----------------------
+  ///
+  ///
+  ////-------------------------Stay Logged In-------------------------////
+  ////-------------------------Stay Logged In-------------------------////
+  ////-------------------------Stay Logged In-------------------------////
+  ////-------------------------Stay Logged In-------------------------////
+  ///[ VALIDATE TOKEN ]
+  Future<String> validateToken(String token) async {
+    final url = Uri.parse("${dotenv.env['STAY_LOGGED_IN']}");
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        return body['message'] ?? "Token is valid";
+      } else {
+        return "Token validation failed (${response.statusCode})";
+      }
+    } catch (e) {
+      return "Something went wrong: $e";
+    }
+  }
 }

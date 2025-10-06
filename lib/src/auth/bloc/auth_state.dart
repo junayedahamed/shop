@@ -17,6 +17,11 @@ final class ShowPasswordStateRegistration extends AuthState {
   ShowPasswordStateRegistration({required this.isShow});
 }
 
+final class ShowConfirmPasswordStateRegistration extends AuthState {
+  final bool isShow;
+  ShowConfirmPasswordStateRegistration({required this.isShow});
+}
+
 final class LoginLoadingState extends AuthState {}
 
 final class LoginSuccessState extends AuthState {
@@ -24,7 +29,10 @@ final class LoginSuccessState extends AuthState {
   LoginSuccessState({this.user});
 }
 
-final class LoginFailState extends AuthState {}
+final class LoginFailState extends AuthState {
+  final String error;
+  LoginFailState({required this.error});
+}
 
 final class LoginFailureState extends AuthActionState {
   final String error;

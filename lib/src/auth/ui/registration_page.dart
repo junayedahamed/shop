@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ocad/src/auth/bloc/auth_bloc.dart';
-import 'package:ocad/src/auth/ui/login_page.dart';
+import 'package:ocad/src/auth/ui/tex_field_eye_toggler/text_field_eye_togller.dart';
 import 'package:ocad/src/auth/ui/widget/cuistom_text_field.dart';
 import 'package:ocad/src/auth/ui/widget/custom_button.dart';
 
@@ -12,7 +12,10 @@ class RegistrationPage extends StatelessWidget {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final AuthBloc authBloc = AuthBloc();
+  final TextFieldEyeTogller textFieldEyeTogller = TextFieldEyeTogller();
   final _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -44,12 +47,12 @@ class RegistrationPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15),
                 Text(
                   "Full Name",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 CustomTextField(
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -70,7 +73,7 @@ class RegistrationPage extends StatelessWidget {
                   "Email address",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
                 CustomTextField(
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -86,16 +89,15 @@ class RegistrationPage extends StatelessWidget {
                   focusedBorderColor: _focusedBorderColor,
                   enabledBorderColor: Colors.blueGrey.shade600,
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 10),
                 Text(
                   "Password",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-                SizedBox(height: 12),
-                BlocConsumer<AuthBloc, AuthState>(
-                  bloc: authBloc,
-                  listener: (context, state) {},
-                  builder: (context, state) {
+                SizedBox(height: 10),
+                ListenableBuilder(
+                  listenable: textFieldEyeTogller,
+                  builder: (context, asyncSnapshot) {
                     return CustomTextField(
                       controller: passwordController,
                       validator: (String? value) {
@@ -109,25 +111,60 @@ class RegistrationPage extends StatelessWidget {
                       enabledBorderColor: Colors.blueGrey.shade600,
                       filled: true,
 
-                      obscureText: state is ShowPasswordStateRegistration
-                          ? !state.isShow
-                          : true,
+                      obscureText: textFieldEyeTogller.isObscure1,
                       focusedBorderColor: _focusedBorderColor,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          authBloc.add(ShowPasswordEventRegistration());
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          textFieldEyeTogller.toggle1();
                         },
-                        child: Icon(
-                          state is ShowPasswordStateRegistration && state.isShow
-                              ? Icons.visibility
-                              : Icons.visibility_off_outlined,
+                        icon: Icon(
+                          textFieldEyeTogller.isObscure1
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           size: 22,
                         ),
                       ),
                     );
                   },
                 ),
-                SizedBox(height: 12),
+                SizedBox(height: 10),
+                Text(
+                  "Confirm Password",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 10),
+                ListenableBuilder(
+                  listenable: textFieldEyeTogller,
+                  builder: (context, asyncSnapshot) {
+                    return CustomTextField(
+                      controller: confirmPasswordController,
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return " Confirm password is required";
+                        }
+                        return null;
+                      },
+                      fillcolor: Colors.white,
+                      hoverColor: Colors.white,
+                      enabledBorderColor: Colors.blueGrey.shade600,
+                      filled: true,
+
+                      obscureText: textFieldEyeTogller.isObscure2,
+                      focusedBorderColor: _focusedBorderColor,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          textFieldEyeTogller.toggle2();
+                        },
+                        icon: Icon(
+                          textFieldEyeTogller.isObscure2
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          size: 22,
+                        ),
+                      ),
+                    );
+                  },
+                ),
 
                 SizedBox(height: 10),
                 CustomButton(
@@ -163,13 +200,7 @@ class RegistrationPage extends StatelessWidget {
                           text: "Sign in",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
-                                ),
-                                (route) => false,
-                              );
+                              context.go('/login');
                             },
                           style: TextStyle(
                             fontSize: 14,

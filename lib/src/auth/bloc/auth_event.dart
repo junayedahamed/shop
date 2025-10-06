@@ -7,11 +7,18 @@ final class ShowPasswordEventLogin extends AuthEvent {}
 
 final class ShowPasswordEventRegistration extends AuthEvent {}
 
+final class ShowConfirmPasswordEventRegistration extends AuthEvent {}
+
 final class LoginUserEvent extends AuthEvent {
   final String email;
   final String password;
+  final BuildContext context;
 
-  LoginUserEvent({required this.email, required this.password});
+  LoginUserEvent({
+    required this.email,
+    required this.password,
+    required this.context,
+  });
 }
 
 final class RegisterUserEvent extends AuthEvent {

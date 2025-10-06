@@ -20,6 +20,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ShowPasswordEventLogin>(showPasswordEventLogin);
 
     on<ShowPasswordEventRegistration>(showPasswordEventRegistration);
+    on<ShowConfirmPasswordEventRegistration>(
+      showConfirmPasswordEventRegistration,
+    );
     on<LoginUserEvent>(loginUserEvent);
   }
 
@@ -60,19 +63,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user.user != null && user.token != null) {
         emit(LoginSuccessState(user: user.user));
         //navigate to home page and save user details in shared preferences
-        await sessionManager.saveUserSession(user.user!, user.token!);
+        // await sessionManager.saveUserSession(user.user!, user.token!);
+        // log({user.user!, user.token!}.toString());
+        if (event.context.mounted) {
+          // Navigator.of(event.context).pushReplacementNamed('/home');
+        }
 
         // return;
       } else {
         emit(LoginFailureState(error: user.message ?? "Login failed"));
-        emit(LoginFailState());
-        log("going to home page");
+        emit(LoginFailState(error: user.message ?? "Login failed"));
+        // log("going to home page");
       }
     } catch (e) {
-      log("here");
+      // log("here");
       emit(LoginFailureState(error: e.toString()));
 
-      emit(LoginFailState());
+      emit(LoginFailState(error: e.toString()));
+    }
+  }
+
+  FutureOr<void> showConfirmPasswordEventRegistration(
+    ShowConfirmPasswordEventRegistration event,
+    Emitter<AuthState> emit,
+  ) {
+    if (state is ShowConfirmPasswordStateRegistration) {
+      final curr = state as ShowConfirmPasswordStateRegistration;
+      emit(ShowConfirmPasswordStateRegistration(isShow: !curr.isShow));
+    } else {
+      emit(ShowConfirmPasswordStateRegistration(isShow: true));
     }
   }
 }

@@ -1,7 +1,7 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ocad/src/auth/bloc/auth_bloc.dart';
 import 'package:ocad/src/auth/ui/registration_page.dart';
 import 'package:ocad/src/auth/ui/widget/cuistom_text_field.dart';
@@ -201,13 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                           text: "Sign up",
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RegistrationPage(),
-                                ),
-                                (route) => false,
-                              );
+                              context.go('/registration');
                             },
                           style: TextStyle(
                             fontSize: 14,

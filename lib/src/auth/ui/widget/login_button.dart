@@ -32,56 +32,33 @@ class LoginButton extends StatelessWidget {
       },
       builder: (context, state) {
         switch (state) {
-          case LoginFailState():
-            return CustomButton(
-              color: Color(0xff9e733e),
-              onPress: () {
-                if (formkey.currentState!.validate()) {
-                  authBloc.add(
-                    LoginUserEvent(
-                      email: emailController.text.trim(),
-                      password: passwordController.text.trim(),
-                    ),
-                  );
-                }
-              },
-              child: Center(
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            );
-          case LoginSuccessState _:
-            final user = state.user;
+          // case LoginFailState():
+          // return CustomButton(
+          //   color: Color(0xff9e733e),
+          //   onPress: () {
+          //     if (formkey.currentState!.validate()) {
+          //       authBloc.add(
+          //         LoginUserEvent(
+          //           email: emailController.text.trim(),
+          //           password: passwordController.text.trim(),
+          //         ),
+          //       );
+          //     }
+          //   },
+          //   child: Center(
+          //     child: Text(
+          //       "Login",
+          //       style: TextStyle(
+          //         fontWeight: FontWeight.w600,
+          //         fontSize: 18,
+          //         color: Colors.white,
+          //       ),
+          //     ),
+          //   ),
+          // );
+          case LoginSuccessState():
+            // final user = state.user;
             // final userF = user.user;
-            return user != null
-                ? Column(
-                    children: [
-                      Text(user.email),
-                      Text(user.name),
-                      Text(user.userid),
-                    ],
-                  )
-                : Text("  No user found");
-          case LoginLoadingState _:
-            return CustomButton(
-              color: Color(0xff9e733e),
-              onPress: () {
-                // if (_formkey.currentState!.validate()) {
-                //   // Perform login action
-                // }
-                return;
-              },
-              child: Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              ),
-            );
-          case LoginFailureState _:
             return CustomButton(
               color: Color(0xff9e733e),
               onPress: () {
@@ -90,6 +67,7 @@ class LoginButton extends StatelessWidget {
                     LoginUserEvent(
                       email: emailController.text.trim(),
                       password: passwordController.text.trim(),
+                      context: context,
                     ),
                   );
                 }
@@ -106,6 +84,54 @@ class LoginButton extends StatelessWidget {
               ),
             );
 
+          case LoginLoadingState():
+            return CustomButton(
+              color: Color(0xff9e733e),
+              onPress: () {
+                // if (_formkey.currentState!.validate()) {
+                //   // Perform login action
+                // }
+                return;
+              },
+              child: Center(
+                child: Transform.scale(
+                  scale: 0.6,
+                  child: CircularProgressIndicator(color: Colors.white),
+                ),
+              ),
+            );
+          case LoginFailState():
+            return Column(
+              spacing: 5,
+              children: [
+                Text(state.error, style: TextStyle(color: Colors.red)),
+                CustomButton(
+                  color: Color(0xff9e733e),
+                  onPress: () {
+                    if (formkey.currentState!.validate()) {
+                      authBloc.add(
+                        LoginUserEvent(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                          context: context,
+                        ),
+                      );
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+
           default:
             return CustomButton(
               color: Color(0xff9e733e),
@@ -115,6 +141,7 @@ class LoginButton extends StatelessWidget {
                     LoginUserEvent(
                       email: emailController.text.trim(),
                       password: passwordController.text.trim(),
+                      context: context,
                     ),
                   );
                 }

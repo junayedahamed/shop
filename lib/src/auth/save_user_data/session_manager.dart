@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/models/user_model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SessionManager {
+  final ApiCalls apiCalls = ApiCalls();
   static const _userKey = 'user';
   static const _sessionToken = 'accessToken';
   // static const _refreshTokenKey = 'refreshToken';
@@ -21,8 +23,8 @@ class SessionManager {
     );
   }
 
-  // 🔑 Get access token
-  Future<String?> getAccessToken() async {
+  // 🔑 Get session token
+  Future<String?> getSessionToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_sessionToken);
   }
@@ -48,6 +50,20 @@ class SessionManager {
     if (expiryStr == null) return false;
 
     final expiryDate = DateTime.parse(expiryStr);
+    try {
+      final tokenValue = await getSessionToken();
+      if (tokenValue != null) {
+        final isValid = await apiCalls.validateToken(tokenValue);
+        if (isValid.toLowerCase() == 'ok') {
+          return DateTime.now().isBefore(expiryDate);
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+
     return DateTime.now().isBefore(expiryDate);
   }
 
