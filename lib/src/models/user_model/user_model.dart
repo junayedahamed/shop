@@ -6,8 +6,10 @@ class UserModel {
   final String userid;
   // final String refreshtoken;
   final String? location;
+  final String? profileImage; // New nullable field
 
-  UserModel({
+  const UserModel({
+    this.profileImage,
     required this.id,
     required this.name,
     required this.email,
@@ -20,6 +22,7 @@ class UserModel {
   /// ✅ Create a UserModel from JSON
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     id: json['id'] is String ? int.parse(json['id']) : json['id'],
+    profileImage: json['profile_image'], // safe nullable assignment
     name: json['name'] ?? '',
     email: json['email'] ?? '',
     createdAt: DateTime.parse(json['created_at']),
@@ -36,6 +39,7 @@ class UserModel {
     'created_at': createdAt.toIso8601String(),
     'userid': userid,
     // 'refreshtoken': refreshtoken,
+    if (profileImage != null) 'profile_image': profileImage,
     if (location != null) 'location': location, // only include if not null
   };
 }

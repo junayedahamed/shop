@@ -30,18 +30,22 @@ class _AccountPageState extends State<AccountPage> {
                   spacing: 10,
                   children: [
                     Center(
-                      child: CircleAvatar(
-                        maxRadius: 35,
-                        minRadius: 20,
-                        child: Image.network(
-                          // errorBuilder: (context, error, stackTrace) {
-                          //   return Icon(Icons.person, size: 30);
-                          // },
-                          "https://c9yois02lm.ufs.sh/f/RXJBrPvyVfAxYX3edhJSAb5pao2WXGiI8NF04zLZqOKJlnyt",
-                          // loadingBuilder: (context, child, loadingProgress) {
-                          //   log((loadingProgress?.expectedTotalBytes).toString());
-                          //   return CircularProgressIndicator();
-                          // },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CircleAvatar(
+                          maxRadius: 35,
+                          minRadius: 20,
+                          child: Image.network(
+                            // errorBuilder: (context, error, stackTrace) {
+                            //   return Icon(Icons.person, size: 30);
+                            // },
+                            fetchUserData.user?.profileImage ??
+                                "https://c9yois02lm.ufs.sh/f/RXJBrPvyVfAxxuWHv4z3g6Ua32SlhOEPT9iwZ1z8GCQDWjyF",
+                            // loadingBuilder: (context, child, loadingProgress) {
+                            //   log((loadingProgress?.expectedTotalBytes).toString());
+                            //   return CircularProgressIndicator();
+                            // },
+                          ),
                         ),
                       ),
                     ),
@@ -53,8 +57,7 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                     ),
                     Text(
-                      fetchUserData.user?.createdAt.year.toString() ??
-                          "No year",
+                      "User from ${fetchUserData.user?.createdAt.year.toString() ?? " -- "}",
                       style: TextStyle(color: Colors.grey),
                     ),
                     Text(fetchUserData.user?.email ?? "No email"),

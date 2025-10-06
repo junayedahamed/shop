@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
 import 'package:ocad/src/auth/save_user_data/session_manager.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
