@@ -48,6 +48,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user.user != null && user.token != null) {
         emit(LoginSuccessState(user: user.user));
         //navigate to home page and save user details in shared preferences
+
         await sessionManager.saveUserSession(user.user!, user.token!);
         // log({user.user!, user.token!}.toString());
         if (event.context.mounted) {

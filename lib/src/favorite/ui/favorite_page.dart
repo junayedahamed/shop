@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ocad/src/favorite/bloc/favorite_bloc.dart';
 import 'package:ocad/src/favorite/ui/widget/favourite_data_card.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
-import 'package:ocad/src/product_details/ui/widget/product_details_page.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class FavoritePage extends StatefulWidget {
@@ -101,14 +101,13 @@ class _FavoritePageState extends State<FavoritePage> {
                       },
 
                       onFavProductPress: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsPage(
-                              product: datacell,
-                              isFavorite: true,
-                            ),
-                          ),
+                        context.pushNamed(
+                          'details',
+                          pathParameters: {
+                            'product': datacell.id.toString(),
+                            'isFavorite': true.toString(),
+                          },
+                          extra: {'product': datacell, 'isFavorite': true},
                         );
                       },
                       price: datacell.price.toString(),

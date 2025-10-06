@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:ocad/src/account/fetch_user_data/logout_response.dart';
 import 'package:ocad/src/auth/login_result_model/login_result_model.dart';
 import 'package:ocad/src/auth/login_result_model/registration_result.dart';
 import 'package:ocad/src/database/apis/exceptions.dart';
@@ -336,6 +338,11 @@ class ApiCalls {
         if (body['user'] != null &&
             body['user'] is List &&
             body['user'].isNotEmpty) {
+          // final userData = body['user'][0] as Map<String, dynamic>;
+          // final processedUserData = {
+          //   ...userData,
+          //   'refreshtoken': token, // Add the token to the user data
+          // };
           final user = UserModel.fromJson(body['user'][0]);
           return LoginResult(user: user, token: token);
         } else {
@@ -412,6 +419,38 @@ class ApiCalls {
       }
     } catch (e) {
       return "Something went wrong: $e";
+    }
+  }
+
+  ///-----------------------Logout User-----------------------///
+  ///-----------------------Logout User-----------------------///
+  ///-----------------------Logout User-----------------------///
+  ///-----------------------Logout User-----------------------///
+  /// [ LOGOUT USER ]
+  Future<LogoutResponse> logoutUser(String token) async {
+    final url = Uri.parse("${dotenv.env['LOGOUT']}");
+    log(url.toString());
+    log(token);
+
+    try {
+      final response = await http.post(
+        url,
+
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+      log(response.statusCode.toString());
+      log(response.body.toString());
+      if (response.statusCode == 200) {
+        final message = jsonDecode(response.body)['message'].toString();
+        return LogoutResponse(success: true, message: message);
+      } else {
+        return LogoutResponse(success: false, message: "Logout failed");
+      }
+    } catch (e) {
+      throw exc.handlePostApiException(e);
     }
   }
 }

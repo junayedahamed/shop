@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:ocad/src/account/fetch_user_data/fetch_user_data.dart';
 import 'package:ocad/src/account/ui/widget/null_account.dart';
@@ -106,7 +108,10 @@ class _AccountPageState extends State<AccountPage> {
                     ProfileTiles(
                       leadingIcon: Icons.logout,
                       tileName: "Logout",
-                      ontap: () {},
+                      ontap: () {
+                        log("Logout tapped");
+                        fetchUserData.clearUser(context);
+                      },
                     ),
                   ],
                 )
