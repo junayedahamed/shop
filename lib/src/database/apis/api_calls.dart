@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:ocad/src/auth/login_result_model/login_result_model.dart';
+import 'package:ocad/src/auth/login_result_model/registration_result.dart';
 import 'package:ocad/src/database/apis/exceptions.dart';
 
 import 'package:ocad/src/models/product_model/product_model.dart';
@@ -354,7 +355,11 @@ class ApiCalls {
   ///----------------------Auth API CALLS ----------------------
   ///----------------------Auth API CALLS ----------------------
   ///[ CREATE USER ]
-  Future<void> createUser(String name, String email, String password) async {
+  Future<RegistrationResult> createUser(
+    String name,
+    String email,
+    String password,
+  ) async {
     final url = Uri.parse("${dotenv.env['USER_REGISTER']}");
 
     try {
@@ -364,10 +369,14 @@ class ApiCalls {
         headers: {"Content-Type": "application/json"},
       );
 
-      if (response.statusCode == 201) {
-        // User created successfully
+      if (response.statusCode == 200) {
+        final message = jsonDecode(response.body)['message'].toString();
+        return RegistrationResult(isSuccess: true, errorMessage: message);
       } else {
-        // Handle error
+        return RegistrationResult(
+          isSuccess: false,
+          errorMessage: "Some Problem occurred",
+        );
       }
     } catch (e) {
       throw exc.handlePostApiException(e);

@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ocad/src/auth/save_user_data/session_manager.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/models/user_model/user_model.dart';
@@ -18,11 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // on<AuthEvent>((event, emit) {});
 
     on<ShowPasswordEventLogin>(showPasswordEventLogin);
-
-    on<ShowPasswordEventRegistration>(showPasswordEventRegistration);
-    on<ShowConfirmPasswordEventRegistration>(
-      showConfirmPasswordEventRegistration,
-    );
+    on<RegisterUserEvent>(registerUserEvent);
     on<LoginUserEvent>(loginUserEvent);
   }
 
@@ -40,17 +36,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   //registration passsword show hide
-  FutureOr<void> showPasswordEventRegistration(
-    ShowPasswordEventRegistration event,
-    Emitter<AuthState> emit,
-  ) {
-    if (state is ShowPasswordStateRegistration) {
-      final curr = state as ShowPasswordStateRegistration;
-      emit(ShowPasswordStateRegistration(isShow: !curr.isShow));
-    } else {
-      emit(ShowPasswordStateRegistration(isShow: true));
-    }
-  }
 
   FutureOr<void> loginUserEvent(
     LoginUserEvent event,
@@ -63,10 +48,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user.user != null && user.token != null) {
         emit(LoginSuccessState(user: user.user));
         //navigate to home page and save user details in shared preferences
-        // await sessionManager.saveUserSession(user.user!, user.token!);
+        await sessionManager.saveUserSession(user.user!, user.token!);
         // log({user.user!, user.token!}.toString());
         if (event.context.mounted) {
-          // Navigator.of(event.context).pushReplacementNamed('/home');
+          event.context.go('/navigation');
         }
 
         // return;
@@ -83,15 +68,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  FutureOr<void> showConfirmPasswordEventRegistration(
-    ShowConfirmPasswordEventRegistration event,
+  FutureOr<void> registerUserEvent(
+    RegisterUserEvent event,
     Emitter<AuthState> emit,
-  ) {
-    if (state is ShowConfirmPasswordStateRegistration) {
-      final curr = state as ShowConfirmPasswordStateRegistration;
-      emit(ShowConfirmPasswordStateRegistration(isShow: !curr.isShow));
-    } else {
-      emit(ShowConfirmPasswordStateRegistration(isShow: true));
+  ) async {
+    try {
+      log({event.email, event.password}.toString());
+      emit(RegistrationLoadingState());
+      final result = await apiCalls.createUser(
+        event.name,
+        event.email,
+        event.password,
+      );
+      if (result.isSuccess) {
+        emit(RegistrationSuccessState());
+        //navigate to home page and save user details in shared preferences
+        if (event.context.mounted) {
+          event.context.go('/login');
+        }
+      } else {
+        emit(
+          RegistrationFailureState(
+            error: result.errorMessage ?? "Registration failed",
+          ),
+        );
+        emit(
+          RegistrationFailState(
+            error: result.errorMessage ?? "Registration failed",
+          ),
+        );
+        // log("going to home page");
+      }
+    } catch (e) {
+      // log("here");
+      emit(RegistrationFailureState(error: e.toString()));
+
+      emit(RegistrationFailState(error: e.toString()));
     }
   }
 }

@@ -6,8 +6,14 @@ class ProductDataModel {
   final DateTime createdat;
   final String description;
   final Category category;
+  final int? avilableQuantity;
+  final String? imageUrl;
+  final double? rating;
 
   ProductDataModel({
+    this.avilableQuantity,
+    this.imageUrl,
+    this.rating,
     required this.id,
     required this.productname,
     required this.price,
@@ -25,7 +31,13 @@ class ProductDataModel {
     DateTime? createdat,
     String? description,
     Category? category,
+    int? avilableQuantity,
+    String? imageUrl,
+    double? rating,
   }) => ProductDataModel(
+    avilableQuantity: avilableQuantity ?? this.avilableQuantity,
+    imageUrl: imageUrl ?? this.imageUrl,
+    rating: rating ?? this.rating,
     id: id ?? this.id,
     productname: productname ?? this.productname,
     price: price ?? this.price,
@@ -46,18 +58,28 @@ class ProductDataModel {
         other.category == category &&
         other.createdat == createdat &&
         other.prevprice == prevprice &&
+        other.rating == rating &&
+        other.imageUrl == imageUrl &&
+        other.avilableQuantity == avilableQuantity &&
         other.price == price;
   }
 
   /// Convert from Map to ProductDataModel
   factory ProductDataModel.fromMap(Map<String, dynamic> map) {
     return ProductDataModel(
+      avilableQuantity:
+          map['avilableQuantity']
+              as int?, // Pass avilableQuantity as the positional argument
+      imageUrl:
+          map['imageUrl']
+              as String?, // Pass imageUrl as the positional argument
       id: map['id'] as String,
       productname: map['productname'] as String,
       price: (map['price'] as num).toDouble(),
       prevprice: (map['prevprice'] as num).toDouble(),
       createdat: DateTime.parse(map['createdat'] as String),
       description: map['description'] as String,
+      rating: (map['rating'] as num?)?.toDouble(),
       category: Category.values.firstWhere(
         (e) =>
             e.name.toUpperCase() == (map['category'] as String).toUpperCase(),
@@ -70,6 +92,9 @@ class ProductDataModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'avilableQuantity': avilableQuantity,
+      'imageUrl': imageUrl,
+      'rating': rating,
       'productname': productname,
       'price': price,
       'prevprice': prevprice,
@@ -87,6 +112,8 @@ class ProductDataModel {
         category.hashCode ^
         createdat.hashCode ^
         prevprice.hashCode ^
+        imageUrl.hashCode ^
+        avilableQuantity.hashCode ^
         price.hashCode;
   }
 }

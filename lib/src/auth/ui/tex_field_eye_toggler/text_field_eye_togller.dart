@@ -19,6 +19,9 @@ class TextFieldEyeTogller extends ChangeNotifier {
     if (value1 == null || value1.isEmpty) {
       return "Password is required";
     }
+    if (value1.length < 6) {
+      return "Password must be at least 6 characters long";
+    }
     return null;
   }
 
@@ -32,6 +35,9 @@ class TextFieldEyeTogller extends ChangeNotifier {
     if (value1 != value2) {
       return "Passwords do not match";
     }
+    if (value2.length < 6) {
+      return "Password must be at least 6 characters long";
+    }
     return null;
   }
 
@@ -43,6 +49,15 @@ class TextFieldEyeTogller extends ChangeNotifier {
     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     if (!emailRegex.hasMatch(value)) {
       return "Enter a valid email address";
+    }
+    return null;
+  }
+
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Full Name is required";
+    } else if (value.length < 4) {
+      return "Name must be at least 4 characters long";
     }
     return null;
   }

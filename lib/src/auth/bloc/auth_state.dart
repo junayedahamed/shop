@@ -41,6 +41,11 @@ final class LoginFailureState extends AuthActionState {
 
 final class RegistrationSuccessState extends AuthState {}
 
+final class RegistrationFailState extends AuthState {
+  final String error;
+  RegistrationFailState({required this.error});
+}
+
 final class RegistrationFailureState extends AuthActionState {
   final String error;
   RegistrationFailureState({required this.error});

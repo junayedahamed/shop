@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ocad/src/auth/bloc/auth_bloc.dart';
-import 'package:ocad/src/auth/ui/registration_page.dart';
+import 'package:ocad/src/auth/ui/tex_field_eye_toggler/text_field_eye_togller.dart';
 import 'package:ocad/src/auth/ui/widget/cuistom_text_field.dart';
 import 'package:ocad/src/auth/ui/widget/login_button.dart';
 
@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
-
+  final TextFieldEyeTogller textFieldEyeTogller = TextFieldEyeTogller();
   final _formkey = GlobalKey<FormState>();
 
   final AuthBloc authBloc = AuthBloc();
@@ -34,6 +34,9 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    textFieldEyeTogller.dispose();
+    authBloc.close();
+    _formkey.currentState?.dispose();
     super.dispose();
   }
 
@@ -78,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (passwordController.text.isEmpty) {
                       return "email is required";
                     }
-                    return null;
+                    return textFieldEyeTogller.validateEmail(value);
                   },
                   controller: emailController,
                   fillcolor: Colors.white,
@@ -103,9 +106,11 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         // log(x)
                         // log("Forgot password tapped");
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(content: Text("Forgot password tapped")),
-                        // );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("This service is unavailable"),
+                          ),
+                        );
                       },
 
                       child: Text(
@@ -130,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (passwordController.text.isEmpty) {
                           return "Password is required";
                         }
-                        return null;
+                        return textFieldEyeTogller.validatePassword1(value);
                       },
                       fillcolor: Colors.white,
                       hoverColor: Colors.white,
@@ -156,30 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 SizedBox(height: 12),
-                // Row(
-                //   children: [
-                //     Checkbox(
-                //       value: false,
-                //       activeColor: Color(0xff9e733e),
-                //       shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(4),
-                //         side: BorderSide(
-                //           style: BorderStyle.solid,
-                //           color: Colors.blueGrey.shade700,
-                //           width: 0.8,
-                //         ),
-                //       ),
-                //       onChanged: (value) {},
-                //     ),
-                //     Text(
-                //       "Remember me",
-                //       style: TextStyle(
-                //         fontSize: 14,
-                //         fontWeight: FontWeight.w500,
-                //       ),
-                //     ),
-                //   ],
-                // ),
+
                 SizedBox(height: 16),
                 LoginButton(
                   formkey: _formkey,

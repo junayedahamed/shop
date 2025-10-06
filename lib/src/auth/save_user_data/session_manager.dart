@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/models/user_model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +48,8 @@ class SessionManager {
   Future<bool> isSessionValid() async {
     final prefs = await SharedPreferences.getInstance();
     final expiryStr = prefs.getString(_sessionTokenExpiryKey);
+    log('expiryStr: $expiryStr');
+
     if (expiryStr == null) return false;
 
     final expiryDate = DateTime.parse(expiryStr);

@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ocad/src/auth/bloc/auth_bloc.dart';
 import 'package:ocad/src/auth/ui/tex_field_eye_toggler/text_field_eye_togller.dart';
 import 'package:ocad/src/auth/ui/widget/cuistom_text_field.dart';
-import 'package:ocad/src/auth/ui/widget/custom_button.dart';
+import 'package:ocad/src/auth/ui/widget/register_button.dart';
 
 class RegistrationPage extends StatelessWidget {
   RegistrationPage({super.key});
@@ -17,6 +17,7 @@ class RegistrationPage extends StatelessWidget {
   final AuthBloc authBloc = AuthBloc();
   final TextFieldEyeTogller textFieldEyeTogller = TextFieldEyeTogller();
   final _formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,9 +57,9 @@ class RegistrationPage extends StatelessWidget {
                 CustomTextField(
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return "Full Name is required";
+                      return "Full name is required";
                     }
-                    return null;
+                    return textFieldEyeTogller.validateName(value);
                   },
                   controller: fullNameController,
                   fillcolor: Colors.white,
@@ -79,7 +80,7 @@ class RegistrationPage extends StatelessWidget {
                     if (value == null || value.isEmpty) {
                       return "Email is required";
                     }
-                    return null;
+                    return textFieldEyeTogller.validateEmail(value);
                   },
                   controller: emailController,
                   fillcolor: Colors.white,
@@ -104,7 +105,7 @@ class RegistrationPage extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return "Password is required";
                         }
-                        return null;
+                        return textFieldEyeTogller.validatePassword1(value);
                       },
                       fillcolor: Colors.white,
                       hoverColor: Colors.white,
@@ -142,7 +143,10 @@ class RegistrationPage extends StatelessWidget {
                         if (value == null || value.isEmpty) {
                           return " Confirm password is required";
                         }
-                        return null;
+                        return textFieldEyeTogller.validatePassword2(
+                          passwordController.text,
+                          value,
+                        );
                       },
                       fillcolor: Colors.white,
                       hoverColor: Colors.white,
@@ -167,23 +171,11 @@ class RegistrationPage extends StatelessWidget {
                 ),
 
                 SizedBox(height: 10),
-                CustomButton(
-                  color: Color(0xff9e733e),
-                  onPress: () {
-                    if (_formkey.currentState!.validate()) {
-                      // Perform login action
-                    }
-                  },
-                  child: Center(
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                RegisterButton(
+                  formkey: _formkey,
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  nameController: fullNameController,
                 ),
 
                 SizedBox(height: 15),

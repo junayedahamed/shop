@@ -25,8 +25,10 @@ final class RegisterUserEvent extends AuthEvent {
   final String name;
   final String email;
   final String password;
+  final BuildContext context;
 
   RegisterUserEvent({
+    required this.context,
     required this.name,
     required this.email,
     required this.password,
