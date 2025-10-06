@@ -4,7 +4,7 @@ import 'package:ocad/src/cart/bloc/cart_bloc.dart';
 import 'package:ocad/src/database/demo_data.dart';
 import 'package:ocad/src/home/bloc/home_bloc.dart';
 import 'package:ocad/src/home/ui/widget/product_card.dart';
-import 'package:ocad/src/model/product_model/product_model.dart';
+import 'package:ocad/src/models/product_model/product_model.dart';
 import 'package:ocad/src/product_details/ui/widget/product_details_page.dart';
 import 'package:ocad/src/util/responsive_util.dart';
 import 'package:skeletonizer/skeletonizer.dart';

@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/database/demo_data.dart';
-import 'package:ocad/src/model/product_model/product_model.dart';
+import 'package:ocad/src/models/product_model/product_model.dart';
 
 part 'favorite_event.dart';
 part 'favorite_state.dart';

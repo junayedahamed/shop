@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:ocad/src/auth/ui/login_page.dart';
 import 'package:ocad/src/navigator/navigator_page.dart';
 
 void main() async {
