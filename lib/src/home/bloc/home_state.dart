@@ -13,10 +13,10 @@ final class FoodLoadFailedState extends HomeState {
   FoodLoadFailedState({required this.errorMessage});
 }
 
-final class FoodLoadedState extends HomeState {
+final class ProductLoadedState extends HomeState {
   final List<ProductDataModel> data;
 
-  FoodLoadedState({required this.data});
+  ProductLoadedState({required this.data});
 }
 
 final class HomeActionState extends HomeState {}

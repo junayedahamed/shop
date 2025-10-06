@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
+import 'package:ocad/src/auth/save_user_data/session_manager.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/database/demo_data.dart';
 import 'package:ocad/src/models/product_model/product_model.dart';
@@ -16,14 +17,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<RemoveFromCartEvent>(removeFromCartEvent);
     on<CartInitialEvent>(cartInitialEvent);
   }
+  final SessionManager sessionManager = SessionManager();
 
   FutureOr<void> removeFromCartEvent(
     RemoveFromCartEvent event,
     Emitter<CartState> emit,
   ) async {
     try {
+      final user = await sessionManager.getUser();
+      if (user?.email == null || user == null) {
+        emit(
+          RemovedErrorCartMsgState(removedFromCartMsg: "User not logged in"),
+        );
+        return;
+      }
       final result = await apiCalls.rmoveItemFromCart(
-        dotenv.env['USER_EMAIL'].toString(),
+        user.email,
         event.index.id,
       );
       cart.remove(event.index);
@@ -40,11 +49,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     try {
+      final user = await sessionManager.getUser();
+      if (user?.email == null || user == null) {
+        emit(CartDataLoadedState(cartData: cart));
+        return;
+      }
+
       if (cart.isEmpty) {
         emit(CartLoadingState());
-        final result = await apiCalls.getCartItems(
-          dotenv.env['USER_EMAIL'].toString(),
-        );
+        final result = await apiCalls.getCartItems(user.email);
         // log(result.isEmpty.toString());
         if (result.isNotEmpty) {
           cart.addAll(result);

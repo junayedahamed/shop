@@ -92,7 +92,9 @@ class _FavoritePageState extends State<FavoritePage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: FavouriteDataCard(
                       addToCart: () {
-                        homeBloc.add(AddToCartEvent(data: datacell));
+                        homeBloc.add(
+                          AddToCartEvent(data: datacell, context: context),
+                        );
                       },
                       unfavoritePress: () {
                         favoriteBloc.add(RemoveFromFavEvent(item: datacell));

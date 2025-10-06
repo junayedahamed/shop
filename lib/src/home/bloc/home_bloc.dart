@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:ocad/src/auth/save_user_data/session_manager.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/database/demo_data.dart';
 
@@ -13,7 +16,7 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
-    on<FoodInitialEvent>(foodInitialEvent);
+    on<AllDataInitialEvent>(allDataInitialEvent);
     on<OnrefreshEvent>(onrefreshEvent);
     on<AddToFavouriteEvent>(addToFavouriteEvent);
     on<AddToCartEvent>(addToCartEvent);
@@ -21,9 +24,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   // final RuntimeData runtimeData = RuntimeData();
   final ApiCalls apiCalls = ApiCalls();
-  //food initial fetch event
-  FutureOr<void> foodInitialEvent(
-    FoodInitialEvent event,
+  final SessionManager sessionManager = SessionManager();
+  //all data initial fetch event
+  FutureOr<void> allDataInitialEvent(
+    AllDataInitialEvent event,
     Emitter<HomeState> emit,
   ) async {
     try {
@@ -34,9 +38,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         products.addAll(d);
 
-        emit(FoodLoadedState(data: products));
+        emit(ProductLoadedState(data: products));
       } else {
-        emit(FoodLoadedState(data: products));
+        emit(ProductLoadedState(data: products));
       }
     } catch (e) {
       // log("message ${e.toString()}");
@@ -55,19 +59,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     try {
       final res = favorite.contains(event.data);
-
-      if (!res) {
-        final response = await apiCalls.addItemToFavorite(
-          dotenv.env['USER_EMAIL'].toString(),
-          event.data.id,
-        );
-        // log(favorite.isEmpty.toString());
-        emit(AddedToFavouriteState(message: response));
-
-        favorite.add(event.data);
-        emit(FoodLoadedState(data: products));
+      final user = await sessionManager.getUser();
+      if (user?.email == null || user == null) {
+        if (event.context.mounted) {
+          event.context.push('/login');
+          return;
+        }
       } else {
-        emit(AddedToFavouriteState(message: "Already added in favorite"));
+        log("fromfavorite: ${user.email}");
+        if (!res) {
+          final response = await apiCalls.addItemToFavorite(
+            user.email,
+            event.data.id,
+          );
+          // log(favorite.isEmpty.toString());
+          emit(AddedToFavouriteState(message: response));
+
+          favorite.add(event.data);
+          emit(ProductLoadedState(data: products));
+        } else {
+          emit(AddedToFavouriteState(message: "Already added in favorite"));
+        }
       }
     } catch (e) {
       emit(AddedToFavouriteState(message: e.toString()));
@@ -80,14 +92,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     try {
       final res = cart.contains(event.data);
+      final user = await sessionManager.getUser();
+      if (user?.email == null || user == null) {
+        if (event.context.mounted) {
+          event.context.push('/login');
+          return;
+        }
+      }
       // log((!res).toString());
       if (!res) {
         // log("message");
         cart.add(event.data);
-        final result = await apiCalls.addItemToCart(
-          dotenv.env['USER_EMAIL'].toString(),
-          event.data.id,
-        );
+        final result = await apiCalls.addItemToCart(user!.email, event.data.id);
         emit(AddedToCartMsgState(cartAddMessage: result));
         // emit()
       } else {
@@ -110,7 +126,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       products.clear();
       products.addAll(await apiCalls.getData());
       // log(products.toString());
-      emit(FoodLoadedState(data: products));
+      emit(ProductLoadedState(data: products));
     } catch (e) {
       if (e is Map) {
         emit(FoodLoadFailedState(errorMessage: e['message']));

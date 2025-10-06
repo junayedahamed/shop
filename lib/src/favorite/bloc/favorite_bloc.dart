@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:meta/meta.dart';
+import 'package:ocad/src/auth/save_user_data/session_manager.dart';
 import 'package:ocad/src/database/apis/api_calls.dart';
 import 'package:ocad/src/database/demo_data.dart';
 import 'package:ocad/src/models/product_model/product_model.dart';
@@ -16,6 +16,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     on<FavoriteDataInitialEvent>(favoriteDataInitialEvent);
   }
   final ApiCalls apiCalls = ApiCalls();
+  final SessionManager sessionManager = SessionManager();
 
   FutureOr<void> removeFromFavEvent(
     RemoveFromFavEvent event,
@@ -23,8 +24,13 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   ) async {
     // log(event.item.toString());
     try {
+      final user = await sessionManager.getUser();
+      if (user?.email == null || user == null) {
+        emit(FavoriteRemoveErrorState(message: "User not logged in"));
+        return;
+      }
       final result = await apiCalls.rmoveItemFromFavorite(
-        dotenv.env['USER_EMAIL'].toString(),
+        user.email,
         event.item.id,
       );
       favorite.remove(event.item);
@@ -43,13 +49,16 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     Emitter<FavoriteState> emit,
   ) async {
     try {
+      final user = await sessionManager.getUser();
+      if (user?.email == null || user == null) {
+        emit(FavoriteInitialDataLoadedSate(productData: favorite));
+        return;
+      }
       // log("here${favorite.isEmpty}");
       if (favorite.isEmpty) {
         // log(dotenv.env['GET_ITEM_FAV'].toString());
         emit(FavoriteInitialDataLoadingSate());
-        final favDatas = await apiCalls.getItemFromFavorite(
-          dotenv.env['USER_EMAIL'].toString(),
-        );
+        final favDatas = await apiCalls.getItemFromFavorite(user.email);
         favorite.addAll(favDatas);
         // log(favorite.toString());
         emit(FavoriteInitialDataLoadedSate(productData: favorite));

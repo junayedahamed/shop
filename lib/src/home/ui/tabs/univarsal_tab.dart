@@ -32,7 +32,7 @@ class _UniversalTabState extends State<UniversalTab> {
 
   void getAllNecessary() async {
     await Future.microtask(() {
-      homeBloc.add(FoodInitialEvent());
+      homeBloc.add(AllDataInitialEvent());
     });
     await Future.microtask(() {
       favoriteBloc.add(FavoriteDataInitialEvent());
@@ -152,7 +152,7 @@ class _UniversalTabState extends State<UniversalTab> {
                     ),
                   ),
                 );
-              case FoodLoadedState():
+              case ProductLoadedState():
                 final data = state.data
                     .where((element) => element.category == widget.category)
                     .toList();
@@ -196,10 +196,17 @@ class _UniversalTabState extends State<UniversalTab> {
                         name: datacell.productname,
                         price: datacell.price,
                         cartPress: () {
-                          homeBloc.add(AddToCartEvent(data: data[index]));
+                          homeBloc.add(
+                            AddToCartEvent(data: data[index], context: context),
+                          );
                         },
                         favoritePress: () {
-                          homeBloc.add(AddToFavouriteEvent(data: data[index]));
+                          homeBloc.add(
+                            AddToFavouriteEvent(
+                              data: data[index],
+                              context: context,
+                            ),
+                          );
                         },
                       ),
                     );
