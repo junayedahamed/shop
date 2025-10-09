@@ -5,7 +5,7 @@ import 'package:ocad/src/navigator/navigator_page.dart';
 import 'package:ocad/src/product_details/ui/widget/product_details_page.dart';
 import 'package:ocad/src/redirect_user/user_redirector.dart';
 
-GoRouter get router => GoRouter(
+GoRouter router = GoRouter(
   routes: [
     GoRoute(
       name: 'root',

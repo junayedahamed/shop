@@ -110,6 +110,7 @@ class _AccountPageState extends State<AccountPage> {
                       tileName: "Logout",
                       ontap: () {
                         log("Logout tapped");
+
                         fetchUserData.clearUser(context);
                       },
                     ),

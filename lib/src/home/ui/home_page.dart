@@ -17,11 +17,14 @@ class _HomePageState extends State<HomePage>
   final List tabs = ["Food", "Electronics", "Cloths", "Vegetable"];
   late TabController controller;
   final TabHeaderProvider tabHeaderProvider = TabHeaderProvider();
+  // final FavoriteBloc favoriteBloc = FavoriteBloc();
+  // final CartBloc cartBloc = CartBloc();
   //
   @override
   void initState() {
     controller = TabController(length: 4, vsync: this);
     // favoriteBloc.add(FavoriteDataInitialEvent());
+    // cartBloc.add(CartInitialEvent());
     super.initState();
   }
 

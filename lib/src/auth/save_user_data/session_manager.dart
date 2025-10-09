@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:ocad/src/database/apis/api_calls.dart';
+import 'package:ocad/src/database/demo_data.dart';
 import 'package:ocad/src/models/user_model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,34 +48,53 @@ class SessionManager {
   Future<bool> isSessionValid() async {
     final prefs = await SharedPreferences.getInstance();
     final expiryStr = prefs.getString(_sessionTokenExpiryKey);
-    // log('expiryStr: $expiryStr');
 
     if (expiryStr == null) return false;
 
     final expiryDate = DateTime.parse(expiryStr);
+
     try {
       final tokenValue = await getSessionToken();
+      // print('expiryStr: $tokenValue');
       if (tokenValue != null) {
         final isValid = await apiCalls.validateToken(tokenValue);
+        // print(isValid);
+        // print(DateTime.now().isBefore(expiryDate));
         if (isValid.toLowerCase() == 'ok') {
+          // print('Token is valid');
+          return DateTime.now().isBefore(expiryDate);
+        } else {
+          clearSession();
           return DateTime.now().isBefore(expiryDate);
         }
       } else {
+        // print('Token is null');
+        clearSession();
         return false;
       }
     } catch (e) {
+      // print('Error validating token: $e');
+      clearSession();
       return false;
     }
 
-    return DateTime.now().isBefore(expiryDate);
+    // return DateTime.now().isBefore(expiryDate);
   }
 
   // 🚪 Clear session
   Future<void> clearSession() async {
     final prefs = await SharedPreferences.getInstance();
+    // print("prefs");
     await prefs.remove(_userKey);
     await prefs.remove(_sessionToken);
     // await prefs.remove(_refreshTokenKey);
     await prefs.remove(_sessionTokenExpiryKey);
+    // print(cart);
+    // print(favorite);
+    cart.clear();
+    favorite.clear();
+    // print(await getUser());
+    // print(cart);
+    // print(favorite);
   }
 }
