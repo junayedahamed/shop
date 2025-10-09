@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ocad/src/account/fetch_user_data/fetch_user_data.dart';
 import 'package:ocad/src/account/ui/widget/null_account.dart';
 import 'package:ocad/src/account/ui/widget/profile_tiles.dart';
+import 'package:ocad/src/account/ui/widget/update_location_dialogue.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -78,8 +79,15 @@ class _AccountPageState extends State<AccountPage> {
                         ),
                         ProfileTiles(
                           leadingIcon: Icons.location_on,
-                          tileName: "Set up location",
-                          ontap: () {},
+                          tileName:
+                              fetchUserData.user?.location ??
+                              "your location not been set yet",
+                          ontap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => UpdateLocationDialogue(),
+                            );
+                          },
                         ),
                         ProfileTiles(
                           leadingIcon: Icons.shopping_bag_outlined,
