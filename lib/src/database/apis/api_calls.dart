@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:ocad/src/account/fetch_user_data/logout_response.dart';
 import 'package:ocad/src/auth/login_result_model/login_result_model.dart';
@@ -70,9 +71,7 @@ class ApiCalls {
     while (attempt < _maxTry) {
       attempt++;
       try {
-        final uri = Uri.parse(
-          "https://shop-backend-two.vercel.app/product/get-all",
-        );
+        final uri = Uri.parse("${dotenv.env['GET_PRODUCTS']}");
         final response = await http
             .get(uri)
             .timeout(const Duration(seconds: 10));
@@ -112,9 +111,7 @@ class ApiCalls {
 
   Future<String> addItemToFavorite(String useremail, String productId) async {
     try {
-      final url = Uri.parse(
-        "https://shop-backend-two.vercel.app/api/product/add-fav",
-      );
+      final url = Uri.parse("${dotenv.env['ADDTOFAV']}");
       //   log(dotenv.env['ADDTOFAV'].toString());
 
       final response = await http.post(
@@ -146,7 +143,7 @@ class ApiCalls {
   ) async {
     try {
       final url = Uri.parse(
-        "https://shop-backend-two.vercel.app/api/product/fav-delete/$productId/$useremail",
+        "${dotenv.env['REMOVE_FROM_FAV']}/$productId/$useremail",
       );
       //   log(dotenv.env['ADDTOFAV'].toString());
 
@@ -173,11 +170,8 @@ class ApiCalls {
   //get item of favorite
   Future<List<ProductDataModel>> getItemFromFavorite(String useremail) async {
     try {
-      final url = Uri.parse(
-        "https://shop-backend-two.vercel.app/api/product/get-all-fav-by-email/$useremail",
-      );
+      final url = Uri.parse("${dotenv.env['GET_ITEM_FAV']}/$useremail");
       //   log(dotenv.env['ADDTOFAV'].toString());
-      // print(url);
 
       final response = await http.get(
         url,
@@ -215,9 +209,7 @@ class ApiCalls {
   Future<List<ProductDataModel>> getCartItems(String useremail) async {
     try {
       // useremail = "testPostman";
-      final url = Uri.parse(
-        "https://shop-backend-two.vercel.app/api/cart/get-all-cart-email/$useremail",
-      );
+      final url = Uri.parse("${dotenv.env['GET_ITEM_CART']}/$useremail");
       // log(dotenv.env['GET_ITEM_CART'].toString());
 
       final response = await http.get(
@@ -253,9 +245,7 @@ class ApiCalls {
 
   Future<String> addItemToCart(String useremail, String productId) async {
     try {
-      final url = Uri.parse(
-        "https://shop-backend-two.vercel.app/api/cart/add-to-cart",
-      );
+      final url = Uri.parse("${dotenv.env['ADDTOCART']}");
       //   log(dotenv.env['ADDTOFAV'].toString());
 
       final response = await http.post(
@@ -285,7 +275,7 @@ class ApiCalls {
   Future<String> rmoveItemFromCart(String useremail, String productId) async {
     try {
       final url = Uri.parse(
-        "https://shop-backend-two.vercel.app/api/cart/remove-from-cart/$productId/$useremail",
+        "${dotenv.env['REMOVE_FROM_CART']}/$productId/$useremail",
       );
       //   log(dotenv.env['ADDTOFAV'].toString());
 
@@ -317,12 +307,8 @@ class ApiCalls {
   ///----------------------Auth API CALLS [LOGIN USER] ----------------------
 
   Future<LoginResult> loginUser(String email, String password) async {
-    final url = Uri.parse(
-      "https://shop-backend-two.vercel.app/auth/user/login",
-    );
-    final urlJwt = Uri.parse(
-      "https://shop-backend-two.vercel.app/auth/user/jwt-generate/generate-jwt",
-    );
+    final url = Uri.parse("${dotenv.env['USER_LOGIN']}");
+    final urlJwt = Uri.parse("${dotenv.env['JWT_GENERATE']}");
 
     try {
       final tokenRes = await http.post(
@@ -336,7 +322,6 @@ class ApiCalls {
       }
 
       final token = jsonDecode(tokenRes.body)['token'];
-      // print(token);
 
       final res = await http.post(
         url,
@@ -346,7 +331,7 @@ class ApiCalls {
           "Content-Type": "application/json",
         },
       );
-      // print(res.body);
+
       if (res.statusCode == 200) {
         final body = jsonDecode(res.body);
 
@@ -382,9 +367,7 @@ class ApiCalls {
     String email,
     String password,
   ) async {
-    final url = Uri.parse(
-      "https://shop-backend-two.vercel.app/auth/user/register",
-    );
+    final url = Uri.parse("${dotenv.env['USER_REGISTER']}");
 
     try {
       final response = await http.post(
@@ -417,9 +400,7 @@ class ApiCalls {
   ////-------------------------Stay Logged In-------------------------////
   ///[ VALIDATE TOKEN ]
   Future<String> validateToken(String token) async {
-    final url = Uri.parse(
-      "https://shop-backend-two.vercel.app/auth/user/stay-logged-in",
-    );
+    final url = Uri.parse("${dotenv.env['STAY_LOGGED_IN']}");
 
     try {
       final response = await http.get(
@@ -447,9 +428,7 @@ class ApiCalls {
   ///-----------------------Logout User-----------------------///
   /// [ LOGOUT USER ]
   Future<LogoutResponse> logoutUser(String token) async {
-    final url = Uri.parse(
-      "https://shop-backend-two.vercel.app/auth/auth/user/logout",
-    );
+    final url = Uri.parse("${dotenv.env['LOGOUT']}");
     log(url.toString());
     log(token);
 
@@ -466,9 +445,6 @@ class ApiCalls {
       log(response.body.toString());
       if (response.statusCode == 200) {
         final message = jsonDecode(response.body)['message'].toString();
-        // print("clearing session");
-        // favorite.clear();
-        // cart.clear();
         return LogoutResponse(success: true, message: message);
       } else {
         return LogoutResponse(success: false, message: "Logout failed");
