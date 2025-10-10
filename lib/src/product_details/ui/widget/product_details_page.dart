@@ -22,35 +22,35 @@ class ProductDetailsPage extends StatelessWidget {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 300, child: Placeholder()),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  product.productname,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                Text("4.5 ✨"),
-              ],
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              height: 280,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 200, child: Placeholder()),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    product.productname,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  Text("4.5 ✨"),
+                ],
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                height: 250,
 
-              child: BlocConsumer<OrderBloc, OrderState>(
-                bloc: orderBloc,
-                listener: (context, state) {},
-                builder: (context, state) {
-                  // log(
-                  //   (state is DescriptionSeeState && state.isSeeMore)
-                  //       .toString(),
-                  // );
-                  return SingleChildScrollView(
-                    child: RichText(
+                child: BlocConsumer<OrderBloc, OrderState>(
+                  bloc: orderBloc,
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    // log(
+                    //   (state is DescriptionSeeState && state.isSeeMore)
+                    //       .toString(),
+                    // );
+                    return RichText(
                       textAlign: TextAlign.justify,
                       text: TextSpan(
                         children: [
@@ -88,58 +88,59 @@ class ProductDetailsPage extends StatelessWidget {
                       ),
 
                       // maxLines: 4,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Spacer(),
-            Text("Price: \$${product.price}"),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: isFavorite ? Colors.pink : null,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.shopping_cart),
-                    ),
-                  ],
+                    );
+                  },
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.lightGreen, Colors.limeAccent],
+              ),
+              // Spacer(),
+              SizedBox(height: 10),
+              Text("Price: \$${product.price}"),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.pink : null,
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    height: 32,
-                    width: 150,
-                    child: Center(
-                      child: Text(
-                        "Place Order",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.shopping_cart),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.lightGreen, Colors.limeAccent],
+                        ),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      height: 32,
+                      width: 150,
+                      child: Center(
+                        child: Text(
+                          "Place Order",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-          ],
+                ],
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
