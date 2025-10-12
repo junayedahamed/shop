@@ -349,11 +349,11 @@ class ApiCalls {
           return LoginResult(message: body['message'] ?? "No user found");
         }
       } else {
-        return LoginResult(message: "Login failed (${res.statusCode})");
+        return LoginResult(message: "Login failed ");
       }
     } catch (e) {
       // You can log the error if needed
-      return LoginResult(message: "Something went wrong: $e");
+      throw exc.handlePostApiException(e);
     }
   }
 

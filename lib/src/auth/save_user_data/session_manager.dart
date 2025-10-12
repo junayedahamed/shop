@@ -62,7 +62,16 @@ class SessionManager {
         // print(DateTime.now().isBefore(expiryDate));
         if (isValid.toLowerCase() == 'ok') {
           // print('Token is valid');
-          return DateTime.now().isBefore(expiryDate);
+
+          if (DateTime.now().isBefore(expiryDate)) {
+            await prefs.setString(
+              _sessionTokenExpiryKey,
+              DateTime.now().add(const Duration(days: 2)).toIso8601String(),
+            );
+            return true;
+          } else {
+            return false;
+          }
         } else {
           clearSession();
           return DateTime.now().isBefore(expiryDate);
